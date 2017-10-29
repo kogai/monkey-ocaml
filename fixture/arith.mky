@@ -11,4 +11,6 @@ true
 false
 
 if true then false else true
-if false then succ 0 else succ (pred 0)
+if false then
+  succ 0 else
+  succ (pred 0)

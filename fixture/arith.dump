@@ -1,0 +1,11 @@
+`TermSucc (`TermZero)
+`TermSucc (`TermSucc (`TermZero))
+`TermPred (`TermZero)
+`TermPred (`TermPred (`TermZero))
+`TermIsZero (`TermZero)
+`TermIsZero (`TermSucc (`TermZero))
+`TermTrue
+`TermFalse
+`TermIf ((`TermTrue, `TermFalse, `TermTrue))
+`TermIf ((`TermFalse, `TermSucc (`TermZero),
+          `TermSucc (`TermPred (`TermZero))))
