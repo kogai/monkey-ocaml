@@ -14,12 +14,12 @@ let rec is_num = Ast.(function
 let rec eval' = Ast.(function
     | TermSucc (info, t) -> TermSucc (info, eval' t)
 
-    | TermPred (info, TermZero _) -> TermZero dummyinfo
+    | TermPred (info, TermZero _) -> TermZero info
     | TermPred (info, TermSucc (_, num)) when is_num num -> num
     | TermPred (info, t) -> TermPred (info, eval' t)
 
-    | TermIsZero (info, TermZero _) -> TermTrue dummyinfo
-    | TermIsZero (info, TermSucc (_, num)) when is_num num -> TermFalse dummyinfo
+    | TermIsZero (info, TermZero _) -> TermTrue info
+    | TermIsZero (info, TermSucc (_, num)) when is_num num -> TermFalse info
     | TermIsZero (info, t) -> TermIsZero (info, eval' t)
 
     | TermIf (_, TermTrue _, t2, t3) -> t2

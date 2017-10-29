@@ -4,11 +4,11 @@
    (Ast.TermSucc ((Ast.INFO ("fixture/arith.mky", 2, 10)),
       (Ast.TermZero (Ast.INFO ("fixture/arith.mky", 2, 12)))))
    ))
-(Ast.TermZero Ast.UNKNOWN)
+(Ast.TermZero (Ast.INFO ("fixture/arith.mky", 4, 4)))
 (Ast.TermPred ((Ast.INFO ("fixture/arith.mky", 5, 4)),
-   (Ast.TermZero Ast.UNKNOWN)))
-(Ast.TermTrue Ast.UNKNOWN)
-(Ast.TermFalse Ast.UNKNOWN)
+   (Ast.TermZero (Ast.INFO ("fixture/arith.mky", 5, 10)))))
+(Ast.TermTrue (Ast.INFO ("fixture/arith.mky", 7, 7)))
+(Ast.TermFalse (Ast.INFO ("fixture/arith.mky", 8, 7)))
 (Ast.TermTrue (Ast.INFO ("fixture/arith.mky", 10, 4)))
 (Ast.TermFalse (Ast.INFO ("fixture/arith.mky", 11, 5)))
 (Ast.TermFalse (Ast.INFO ("fixture/arith.mky", 13, 18)))
