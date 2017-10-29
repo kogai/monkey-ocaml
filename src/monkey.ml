@@ -4,12 +4,7 @@ open Lexing
 
 exception Unreachable
 
-let rec parse lexbuf =
-  match Parser.program read lexbuf with
-  | None -> []
-  | Some statement -> statement::(parse lexbuf)
-
-let print statements =
+let to_string statements =
   statements
   |> List.map ~f:Ast.show
   |> String.concat ~sep:"\n"
@@ -19,14 +14,15 @@ let write path content =
     | filename, Some _ -> sprintf "%s.dump" filename
     | _ -> raise Unreachable
   in
+  print_endline content;
   Out_channel.write_all filename content
 
 let run filename () =
   filename
   |> In_channel.create
   |> Lexing.from_channel
-  |> parse
-  |> print
+  |> Eval.eval filename
+  |> to_string
   |> write filename
 
 let () =
