@@ -20,11 +20,11 @@ let rec eval' = Ast.(function
 
     | TermIsZero (info, TermZero _) -> TermTrue info
     | TermIsZero (info, TermSucc (_, num)) when is_num num -> TermFalse info
-    | TermIsZero (info, t) -> TermIsZero (info, eval' t)
+    | TermIsZero (info, t) -> eval' @@ TermIsZero (info, eval' t)
 
     | TermIf (_, TermTrue _, t2, t3) -> t2
     | TermIf (_, TermFalse _, t2, t3) -> t3
-    | TermIf (info, t1, t2, t3) -> TermIf (info, eval' t1, t2, t3)
+    | TermIf (info, t1, t2, t3) -> eval' @@ TermIf (info, eval' t1, t2, t3)
 
     (* No rule to applies *)
     | TermTrue info

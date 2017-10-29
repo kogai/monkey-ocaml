@@ -16,3 +16,10 @@
    (Ast.TermPred ((Ast.INFO ("fixture/arith.mky", 16, 15)),
       (Ast.TermZero (Ast.INFO ("fixture/arith.mky", 16, 17)))))
    ))
+(Ast.TermTrue (Ast.INFO ("fixture/arith.mky", 18, 7)))
+(Ast.TermSucc ((Ast.INFO ("fixture/arith.mky", 21, 6)),
+   (Ast.TermPred ((Ast.INFO ("fixture/arith.mky", 21, 12)),
+      (Ast.TermSucc ((Ast.INFO ("fixture/arith.mky", 21, 18)),
+         (Ast.TermTrue (Ast.INFO ("fixture/arith.mky", 21, 23)))))
+      ))
+   ))
