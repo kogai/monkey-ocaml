@@ -1,10 +1,10 @@
 NAME := monkey_ocaml
 TEST_NAME := $(NAME)_test
-PKGS :=
-SRC_FILES := $(shell find ./src -type f -name '*.ml')
+PKGS := core,menhirlib,ppx_deriving,ppx_deriving.show
+SRC_FILES := $(shell find ./src -type f -name '*.m*')
 SRC_DIRS := "src"
 
-OCB_FLAGS := -use-menhir -use-ocamlfind -Is $(SRC_DIRS) -pkgs $(PKGS)
+OCB_FLAGS := -use-ocamlfind -use-menhir -Is $(SRC_DIRS) -pkgs $(PKGS)
 OCB := ocamlbuild $(OCB_FLAGS)
 OPAM_VER := 4.03.0
 ARGS := ""
@@ -25,7 +25,7 @@ native: $(NAME).native
 
 .PHONY: byte
 byte: $(NAME).byte
-	@./$(NAME).byte $(ARGS)
+	@./NAME).byte $(ARGS)
 
 .PHONY: docker
 docker:
@@ -34,7 +34,7 @@ docker:
 
 .PHONY: run
 run:
-	docker-compose run $(NAME)
+	docker-compose run $(NAME) $(ARGS)
 
 .PHONY: install
 install:
@@ -43,7 +43,8 @@ install:
 	eval `opam config env` && \
 	opam update && \
 	opam install -y \
-		ocamlfind
+		ocamlfind \
+		core
 
 .PHONY: clean
 clean:

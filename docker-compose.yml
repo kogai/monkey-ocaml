@@ -1,18 +1,14 @@
 version: '2'
 services:
   datastore:
-    container_name: opam_store
     volumes:
       - $HOME/.opam:$HOME/.opam
     build:
       context: ./datastore
   monkey_ocaml:
-    container_name: ocaml_build
     build:
       context: .
+    volumes:
+      - .:/monkey_ocaml
     volumes_from:
       - datastore
-
-volumes:
-  opam:
-    driver: local
