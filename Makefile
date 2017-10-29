@@ -1,38 +1,50 @@
-OCB_FLAGS = -use-ocamlfind -use-menhir -I src -pkgs 'sedlex,ounit,core,menhirlib,ppx_deriving.show' -tags thread
-OCB = ocamlbuild $(OCB_FLAGS)
+NAME := monkey_ocaml
+TEST_NAME := $(NAME)_test
+PKGS :=
+SRC_FILES := $(shell find ./src -type f -name '*.ml')
+SRC_DIRS := "src"
 
-build:native byte
+OCB_FLAGS := -use-menhir -use-ocamlfind -Is $(SRC_DIRS) -pkgs $(PKGS)
+OCB := ocamlbuild $(OCB_FLAGS)
+OPAM_VER := 4.03.0
+ARGS := ""
 
-run:build
-	./main.native fixture.json
+all:$(NAME).native $(NAME).byte
 
-test:
-	$(OCB) main_test.native
-	./main_test.native
+$(NAME).native: $(SRC_FILES)
+	eval `opam config env` && \
+	$(OCB) $(NAME).native
 
-native:
-	$(OCB) main.native
+$(NAME).byte: $(SRC_FILES)
+	eval `opam config env` && \
+	$(OCB) $(NAME).byte
 
-byte:
-	$(OCB) main.byte
+.PHONY: native
+native: $(NAME).native
+	@./$(NAME).native $(ARGS)
 
-init:
-	opam init -ya --comp=4.03.0
-	eval `opam config env`
+.PHONY: byte
+byte: $(NAME).byte
+	@./$(NAME).byte $(ARGS)
 
+.PHONY: docker
+docker:
+	docker-compose build && \
+	docker-compose run $(NAME) make
+
+.PHONY: run
+run:
+	docker-compose run $(NAME)
+
+.PHONY: install
 install:
-	opam update
+	opam init -ya --comp=$(OPAM_VER) && \
+	opam switch $(OPAM_VER) && \
+	eval `opam config env` && \
+	opam update && \
 	opam install -y \
-		ocp-indent \
-		ocp-index \
-		merlin \
-		core \
-		ocamlfind \
-		sedlex \
-		ppx_deriving\
-		ounit \
-		menhir
-	opam user-setup install
+		ocamlfind
 
+.PHONY: clean
 clean:
-	ocamlbuild -clean
+	$(OCB) -clean
