@@ -1,29 +1,18 @@
-`TermSucc (((Ast.INFO ("fixture/arith.mky", 1, 4)),
-            `TermZero ((Ast.INFO ("fixture/arith.mky", 1, 6)))))
-`TermSucc (((Ast.INFO ("fixture/arith.mky", 2, 4)),
-            `TermSucc (((Ast.INFO ("fixture/arith.mky", 2, 10)),
-                        `TermZero ((Ast.INFO ("fixture/arith.mky", 2, 12)))))))
-`TermPred (((Ast.INFO ("fixture/arith.mky", 4, 4)),
-            `TermZero ((Ast.INFO ("fixture/arith.mky", 4, 6)))))
-`TermPred (((Ast.INFO ("fixture/arith.mky", 5, 4)),
-            `TermPred (((Ast.INFO ("fixture/arith.mky", 5, 10)),
-                        `TermZero ((Ast.INFO ("fixture/arith.mky", 5, 12)))))))
-`TermIsZero (((Ast.INFO ("fixture/arith.mky", 7, 7)),
-              `TermZero ((Ast.INFO ("fixture/arith.mky", 7, 9)))))
-`TermIsZero (((Ast.INFO ("fixture/arith.mky", 8, 7)),
-              `TermSucc (((Ast.INFO ("fixture/arith.mky", 8, 13)),
-                          `TermZero ((Ast.INFO ("fixture/arith.mky", 8, 15)))))))
-`TermTrue ((Ast.INFO ("fixture/arith.mky", 10, 4)))
-`TermFalse ((Ast.INFO ("fixture/arith.mky", 11, 5)))
-`TermIf (((Ast.INFO ("fixture/arith.mky", 13, 2)),
-          `TermTrue ((Ast.INFO ("fixture/arith.mky", 13, 7))),
-          `TermFalse ((Ast.INFO ("fixture/arith.mky", 13, 18))),
-          `TermTrue ((Ast.INFO ("fixture/arith.mky", 13, 28)))))
-`TermIf (((Ast.INFO ("fixture/arith.mky", 14, 2)),
-          `TermFalse ((Ast.INFO ("fixture/arith.mky", 14, 8))),
-          `TermSucc (((Ast.INFO ("fixture/arith.mky", 15, 9)),
-                      `TermZero ((Ast.INFO ("fixture/arith.mky", 15, 11))))),
-          `TermSucc (((Ast.INFO ("fixture/arith.mky", 16, 9)),
-                      `TermPred (((Ast.INFO ("fixture/arith.mky", 16, 15)),
-                                  `TermZero ((Ast.INFO ("fixture/arith.mky",
-                                                16, 17)))))))))
+(Ast.TermSucc ((Ast.INFO ("fixture/arith.mky", 1, 4)),
+   (Ast.TermZero (Ast.INFO ("fixture/arith.mky", 1, 6)))))
+(Ast.TermSucc ((Ast.INFO ("fixture/arith.mky", 2, 4)),
+   (Ast.TermSucc ((Ast.INFO ("fixture/arith.mky", 2, 10)),
+      (Ast.TermZero (Ast.INFO ("fixture/arith.mky", 2, 12)))))
+   ))
+(Ast.TermZero Ast.UNKNOWN)
+(Ast.TermPred ((Ast.INFO ("fixture/arith.mky", 5, 4)),
+   (Ast.TermZero Ast.UNKNOWN)))
+(Ast.TermTrue Ast.UNKNOWN)
+(Ast.TermFalse Ast.UNKNOWN)
+(Ast.TermTrue (Ast.INFO ("fixture/arith.mky", 10, 4)))
+(Ast.TermFalse (Ast.INFO ("fixture/arith.mky", 11, 5)))
+(Ast.TermFalse (Ast.INFO ("fixture/arith.mky", 13, 18)))
+(Ast.TermSucc ((Ast.INFO ("fixture/arith.mky", 16, 9)),
+   (Ast.TermPred ((Ast.INFO ("fixture/arith.mky", 16, 15)),
+      (Ast.TermZero (Ast.INFO ("fixture/arith.mky", 16, 17)))))
+   ))

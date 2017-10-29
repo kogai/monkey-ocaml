@@ -6,19 +6,32 @@ let rec parse lexbuf =
   | None -> []
   | Some statement -> statement::(parse lexbuf)
 
-let eval' x = ()
-(* let eval' = function
-   | `TermTrue
-   | `TermFalse
-   | `TermZero
-   | `TermSucc of t
-   | `TermPred of t
-   | `TermIsZero of t
-   | `TermIf of t * t * t
-   | `TermIllegal *)
+let rec is_num = Ast.(function
+    | TermZero _ -> true
+    | TermSucc (_, num) -> is_num num
+    | _ -> false)
+
+let rec eval' = Ast.(function
+    | TermSucc (info, t) -> TermSucc (info, eval' t)
+
+    | TermPred (info, TermZero _) -> TermZero dummyinfo
+    | TermPred (info, TermSucc (_, num)) when is_num num -> num
+    | TermPred (info, t) -> TermPred (info, eval' t)
+
+    | TermIsZero (info, TermZero _) -> TermTrue dummyinfo
+    | TermIsZero (info, TermSucc (_, num)) when is_num num -> TermFalse dummyinfo
+    | TermIsZero (info, t) -> TermIsZero (info, eval' t)
+
+    | TermIf (_, TermTrue _, t2, t3) -> t2
+    | TermIf (_, TermFalse _, t2, t3) -> t3
+    | TermIf (info, t1, t2, t3) -> TermIf (info, eval' t1, t2, t3)
+
+    (* No rule to applies *)
+    | TermTrue info
+    | TermFalse info
+    | TermZero info as t -> t
+  )
 
 let eval filename lexbuf =
   lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
-  let statements = parse lexbuf in
-  List.iter ~f:eval' statements;
-  statements
+  List.map ~f:eval' (parse lexbuf)
