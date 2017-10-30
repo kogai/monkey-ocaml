@@ -1,3 +1,7 @@
+%{
+  open Ast
+%}
+
 %token <Ast.info> TRUE
 %token <Ast.info> FALSE
 %token <Ast.info> ZERO
