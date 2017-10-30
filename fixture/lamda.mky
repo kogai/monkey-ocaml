@@ -1,0 +1,2 @@
+λ x -> x
+lamda x. lamda y. x y
