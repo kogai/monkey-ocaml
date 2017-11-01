@@ -7,7 +7,7 @@ SRC_DIRS := "src"
 OCB_FLAGS := -use-ocamlfind -use-menhir -Is $(SRC_DIRS) -pkgs $(PKGS)
 OCB := ocamlbuild $(OCB_FLAGS)
 OPAM_VER := 4.03.0
-ARGS := "fixture/arith.mky"
+ARGS := "fixture/lambda.mky"
 
 all:$(NAME).native $(NAME).byte
 
@@ -44,7 +44,12 @@ install:
 	opam update && \
 	opam install -y \
 		ocamlfind \
+		merlin \
 		core
+
+.PHONY: setup
+setup:
+	opam user-setup install
 
 .PHONY: clean
 clean:

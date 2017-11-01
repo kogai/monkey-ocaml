@@ -1,0 +1,2 @@
+(Ast.TermAbs ((Ast.INFO ("fixture/lambda.mky", 1, 6)), "x",
+   (Ast.TermVar ((Ast.INFO ("fixture/lambda.mky", 1, 13)), "x"))))

@@ -18,12 +18,16 @@ let write path content =
   Out_channel.write_all filename content
 
 let run filename () =
+  (* try *)
   filename
   |> In_channel.create
   |> Lexing.from_channel
   |> Eval.eval filename
   |> to_string
   |> write filename
+(* with *)
+(* | Lexer.SyntaxError reason -> printf "\nSyntax error %s!\n" reason *)
+(* | Parser.Error -> printf "Something wrong\n" *)
 
 let () =
   Command.basic ~summary:"Parse and display JSON"
