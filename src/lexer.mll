@@ -17,7 +17,7 @@ let next_line lexbuf =
     Ast.create_info pos_fname pos_lnum (pos_cnum - pos_bol)
 
   let identifier lexbuf =
-    "x"
+    Lexing.lexeme lexbuf
 }
 
 let white = [' ' '\t']+

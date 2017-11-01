@@ -19,5 +19,5 @@ program:
 expression:
   | id = IDENTIFIER; { TermVar (Tuple2.get1 id, Tuple2.get2 id) }
   | LAMBDA; id = IDENTIFIER; ARROW tm = expression { TermAbs ($1, (Tuple2.get2 id), tm) }
+  | PARENTHL; e1 = expression; e2 = expression PARENTHR { TermApp (get_info e1, e1, e2) }
   /* | e1 = expression; e2 = expression; { TermApp (get_info e1, e1, e2) } */
-  /* | PARENTHL; t = expression; PARENTHR { t } */
