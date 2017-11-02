@@ -27,7 +27,8 @@ let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 rule read =
   parse
   | white { read lexbuf }
-  | newline { next_line lexbuf; TERMINATE (info lexbuf) }
+  | newline { next_line lexbuf; read lexbuf }
+  | ";" { TERMINATE (info lexbuf) }
   | "->" { ARROW (info lexbuf) }
   | "lambda" { LAMBDA (info lexbuf) }
   | id { IDENTIFIER ((info lexbuf), (identifier lexbuf)) }
