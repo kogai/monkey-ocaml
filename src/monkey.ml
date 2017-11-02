@@ -26,6 +26,7 @@ let run filename () =
   |> to_string
   |> write filename
 (* with *)
+
 (* | Lexer.SyntaxError reason -> printf "\nSyntax error %s!\n" reason *)
 (* | Parser.Error -> printf "Something wrong\n" *)
 

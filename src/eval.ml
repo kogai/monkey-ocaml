@@ -14,25 +14,36 @@ let rec is_num = Ast.(function
 let rec eval' = Ast.(function
     (* | TermSucc (info, t) -> TermSucc (info, eval' t)
 
-    | TermPred (info, TermZero _) -> TermZero info
-    | TermPred (info, TermSucc (_, num)) when is_num num -> num
-    | TermPred (info, t) -> TermPred (info, eval' t)
+       | TermPred (info, TermZero _) -> TermZero info
+       | TermPred (info, TermSucc (_, num)) when is_num num -> num
+       | TermPred (info, t) -> TermPred (info, eval' t)
 
-    | TermIsZero (info, TermZero _) -> TermTrue info
-    | TermIsZero (info, TermSucc (_, num)) when is_num num -> TermFalse info
-    | TermIsZero (info, t) -> eval' @@ TermIsZero (info, eval' t)
+       | TermIsZero (info, TermZero _) -> TermTrue info
+       | TermIsZero (info, TermSucc (_, num)) when is_num num -> TermFalse info
+       | TermIsZero (info, t) -> eval' @@ TermIsZero (info, eval' t)
 
-    | TermIf (_, TermTrue _, t2, t3) -> t2
-    | TermIf (_, TermFalse _, t2, t3) -> t3
-    | TermIf (info, t1, t2, t3) -> eval' @@ TermIf (info, eval' t1, t2, t3) *)
+       | TermIf (_, TermTrue _, t2, t3) -> t2
+       | TermIf (_, TermFalse _, t2, t3) -> t3
+       | TermIf (info, t1, t2, t3) -> eval' @@ TermIf (info, eval' t1, t2, t3) *)
 
     (* No rule to applies *)
     (* | TermTrue info
-    | TermFalse info
-    | TermZero info as t -> t *)
+       | TermFalse info
+       | TermZero info as t -> t *)
     | t -> t
   )
 
 let eval filename lexbuf =
   lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
-  List.map ~f:eval' (parse lexbuf)
+  let ast =
+    try
+      List.map ~f:eval' (parse lexbuf)
+    with
+    | Lexer.SyntaxError msg ->
+      Printf.fprintf stderr "%s%!" msg;
+      raise @@ Lexer.SyntaxError msg
+    | Parser.Error ->
+      Printf.fprintf stderr "Syntax error! [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
+      raise @@ Parser.Error
+  in
+  ast

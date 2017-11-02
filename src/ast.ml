@@ -1,8 +1,10 @@
 (* filename * line * column *)
-type info = INFO of string * int * int
+type info = string * int * int
 [@@deriving show]
 
-let create_info file line column = INFO (file, line, column)
+let show_info (file, line, column) = Core.sprintf "%s:%d:%d" file line column
+
+let create_info file line column = (file, line, column)
 
 type t =
   | TermVar of info * string

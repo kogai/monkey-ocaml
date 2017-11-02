@@ -1,5 +1,12 @@
-(Ast.TermAbs ((Ast.INFO ("fixture/lambda.mky", 1, 6)), "x",
-   (Ast.TermApp ((Ast.INFO ("fixture/lambda.mky", 1, 13)),
-      (Ast.TermVar ((Ast.INFO ("fixture/lambda.mky", 1, 13)), "x")),
-      (Ast.TermVar ((Ast.INFO ("fixture/lambda.mky", 1, 15)), "x"))))
+(Ast.TermAbs (("fixture/lambda.mky", 1, 6), "x",
+   (Ast.TermApp (("fixture/lambda.mky", 1, 13),
+      (Ast.TermVar (("fixture/lambda.mky", 1, 13), "x")),
+      (Ast.TermAbs (("fixture/lambda.mky", 2, 7), "x",
+         (Ast.TermVar (("fixture/lambda.mky", 2, 14), "x"))))
+      ))
+   ))
+(Ast.TermAbs (("fixture/lambda.mky", 2, 23), "x",
+   (Ast.TermApp (("fixture/lambda.mky", 2, 30),
+      (Ast.TermVar (("fixture/lambda.mky", 2, 30), "x")),
+      (Ast.TermVar (("fixture/lambda.mky", 2, 32), "x"))))
    ))
