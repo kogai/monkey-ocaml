@@ -21,7 +21,7 @@ term:
   | LAMBDA; id = IDENTIFIER; ARROW tm = term { TermAbs ($1, (Tuple2.get2 id), tm) }
 app_term:
   | t = atom_term { t }
-  /* | app_term atom_term { TermApp (get_info $1, $1, $2) } */
+  | e1 = atom_term e2 = atom_term { TermApp (get_info e1, e1, e2) }
 atom_term:
   | PARENTHL; t = term PARENTHR { t }
   | id = IDENTIFIER; { TermVar (Tuple2.get1 id, Tuple2.get2 id) }

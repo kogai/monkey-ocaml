@@ -25,7 +25,7 @@ native: $(NAME).native
 
 .PHONY: byte
 byte: $(NAME).byte
-	@./NAME).byte $(ARGS)
+	@./$(NAME).byte $(ARGS)
 
 .PHONY: docker
 docker:
