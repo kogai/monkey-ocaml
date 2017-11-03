@@ -13,8 +13,6 @@
 
 %%
 
-/* lambda f -> g h i */
-
 program:
   | EOF { None }
   | v = term TERMINATE { Some v }
