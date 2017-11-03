@@ -3,4 +3,4 @@ lambda x -> x x;
 lambda f -> lambda g -> f g;
 lambda f -> g h i;
 lambda f -> g (h i);
-(lambda x -> x) (lambda x -> x x); 
+(lambda x -> x) (lambda y -> y y); 
