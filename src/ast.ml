@@ -1,16 +1,18 @@
 (* filename * line * column *)
-type info = INFO of string * int * int | UNKNOWN
+type info = string * int * int
 [@@deriving show]
 
-let dummyinfo = UNKNOWN
-let createInfo file line column = INFO (file, line, column)
+let show_info (file, line, column) = Core.sprintf "%s:%d:%d" file line column
+
+let create_info file line column = (file, line, column)
 
 type t =
-  | TermTrue of info
-  | TermFalse of info
-  | TermZero of info
-  | TermSucc of info * t
-  | TermPred of info * t
-  | TermIsZero of info * t
-  | TermIf of info * t * t * t
+  | TermVar of info * string
+  | TermAbs of info * string * t
+  | TermApp of info * t * t
 [@@deriving show]
+
+let get_info = function
+  | TermVar(i, _) -> i
+  | TermAbs(i, _, _) -> i
+  | TermApp(i, _, _) -> i

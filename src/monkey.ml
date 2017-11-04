@@ -21,7 +21,7 @@ let run filename () =
   filename
   |> In_channel.create
   |> Lexing.from_channel
-  |> Eval.eval filename
+  |> Eval.eval filename Eval.Environment.empty
   |> to_string
   |> write filename
 

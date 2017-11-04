@@ -1,0 +1,36 @@
+(Ast.TermAbs (("fixture/lambda.mky", 1, 6), "x",
+   (Ast.TermVar (("fixture/lambda.mky", 1, 13), "x"))))
+(Ast.TermAbs (("fixture/lambda.mky", 2, 6), "x",
+   (Ast.TermApp (("fixture/lambda.mky", 2, 13),
+      (Ast.TermVar (("fixture/lambda.mky", 2, 13), "x")),
+      (Ast.TermVar (("fixture/lambda.mky", 2, 15), "x"))))
+   ))
+(Ast.TermAbs (("fixture/lambda.mky", 3, 6), "f",
+   (Ast.TermAbs (("fixture/lambda.mky", 3, 18), "g",
+      (Ast.TermApp (("fixture/lambda.mky", 3, 25),
+         (Ast.TermVar (("fixture/lambda.mky", 3, 25), "f")),
+         (Ast.TermVar (("fixture/lambda.mky", 3, 27), "g"))))
+      ))
+   ))
+(Ast.TermAbs (("fixture/lambda.mky", 4, 6), "f",
+   (Ast.TermApp (("fixture/lambda.mky", 4, 13),
+      (Ast.TermApp (("fixture/lambda.mky", 4, 13),
+         (Ast.TermVar (("fixture/lambda.mky", 4, 13), "g")),
+         (Ast.TermVar (("fixture/lambda.mky", 4, 15), "h")))),
+      (Ast.TermVar (("fixture/lambda.mky", 4, 17), "i"))))
+   ))
+(Ast.TermAbs (("fixture/lambda.mky", 5, 6), "f",
+   (Ast.TermApp (("fixture/lambda.mky", 5, 13),
+      (Ast.TermVar (("fixture/lambda.mky", 5, 13), "g")),
+      (Ast.TermApp (("fixture/lambda.mky", 5, 16),
+         (Ast.TermVar (("fixture/lambda.mky", 5, 16), "h")),
+         (Ast.TermVar (("fixture/lambda.mky", 5, 18), "i"))))
+      ))
+   ))
+(Ast.TermAbs (("fixture/lambda.mky", 6, 23), "y",
+   (Ast.TermApp (("fixture/lambda.mky", 6, 30),
+      (Ast.TermVar (("fixture/lambda.mky", 6, 30), "y")),
+      (Ast.TermVar (("fixture/lambda.mky", 6, 32), "y"))))
+   ))
+(Ast.TermAbs (("fixture/lambda.mky", 7, 25), "y",
+   (Ast.TermVar (("fixture/lambda.mky", 7, 32), "y"))))
