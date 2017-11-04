@@ -4,7 +4,13 @@
 %}
 %token <Ast.info> LAMBDA
 %token <Ast.info> ARROW
+
 %token <Ast.info * string> IDENTIFIER
+%token <Ast.info * float> NUMBER
+%token <Ast.info * bool> BOOLEAN
+%token <Ast.info * string> STRING
+
+%token <Ast.info> DQUOTE
 %token <Ast.info> PARENTHL
 %token <Ast.info> PARENTHR
 %token <Ast.info> TERMINATE
