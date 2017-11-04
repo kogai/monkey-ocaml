@@ -32,3 +32,5 @@
       (Ast.TermVar (("fixture/lambda.mky", 6, 30), "y")),
       (Ast.TermVar (("fixture/lambda.mky", 6, 32), "y"))))
    ))
+(Ast.TermAbs (("fixture/lambda.mky", 7, 25), "y",
+   (Ast.TermVar (("fixture/lambda.mky", 7, 32), "y"))))

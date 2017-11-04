@@ -2,7 +2,7 @@ open Core
 open Lexing
 
 exception EvaluateError
-exception BindError
+exception BindError of Ast.info * string 
 
 module Environment : sig
   type t = {
@@ -18,6 +18,7 @@ end = struct
     store: (string, Ast.t) Hashtbl.t;
     outer: t option;
   }
+
   let create outer = {
     store = String.Table.create ();
     outer;
@@ -40,35 +41,21 @@ let rec parse lexbuf =
   | None -> []
   | Some statement -> statement::(parse lexbuf)
 
-(* 
-let rec is_num = Ast.(function
-    | TermZero _ -> true
-    | TermSucc (_, num) -> is_num num
-    | _ -> false) *)
-
-(* let rec eval1 ctx t = match t with
-    TmApp(fi,TmAbs(_, x, t12) ,v2) when isval ctx v2 ->
-    termSubstTop v2 t12
-   | TmApp(fi,v1,t2) when isval ctx v1 ->
-    let t2' = eval1 ctx t2 in
-    TmApp(fi, v1, t2')
-   | TmApp(fi,t1,t2) ->
-    let t1' = eval1 ctx t1 in
-    TmApp(fi, t1', t2)
-   | _ -> 
-    raise NoRuleApplies *)
-
 let rec eval' env = Ast.(function
     | TermVar (info, name) -> (match Environment.get name env with
-        | None -> raise BindError
+        | None -> raise @@ BindError (info, name)
         | Some x -> x
       )
     | TermApp (info, TermAbs (_, name, term1), term2) ->
       let closure = Environment.create (Some env) in
-      Environment.set closure term2 name;
-      eval' closure term1
-    | TermApp (info, term1, term2) -> raise EvaluateError
-    | x -> x
+      Environment.set closure (eval' env term2) name;
+      eval' closure term1 
+    | TermApp (info, term1, term2) ->
+      let term1 = eval' env term1 in
+      let term2 = eval' env term2 in
+      eval' env (TermApp (info, term1, term2))
+    (* No rules to apply *)
+    | TermAbs (_, _, _) as x -> x
   )
 
 let eval filename env lexbuf =
@@ -77,11 +64,14 @@ let eval filename env lexbuf =
     try
       List.map ~f:(eval' env) (parse lexbuf)
     with
-    | Lexer.SyntaxError msg ->
+    | Lexer.SyntaxError msg as e ->
       Printf.fprintf stderr "%s%!" msg;
-      raise @@ Lexer.SyntaxError msg
+      raise @@ e
     | Parser.Error ->
       Printf.fprintf stderr "Syntax error! [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
       raise @@ Parser.Error
+    | BindError (info, name) as e ->
+      Printf.fprintf stderr "Unbound error! [%s] @%s\n" name (Ast.show_info info);
+      raise @@ e
   in
   ast
