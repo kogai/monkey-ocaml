@@ -18,7 +18,7 @@ program:
   | v = term TERMINATE { Some v }
 term:
   | t = app_term { t }
-  | LAMBDA; id = IDENTIFIER ARROW tm = term { TermAbs ($1, (Tuple2.get2 id), tm) }
+  | id = IDENTIFIER ARROW tm = term { TermAbs ((Tuple2.get1 id), (Tuple2.get2 id), tm) }
 app_term:
   | t = atom_term { t }
   | e1 = app_term e2 = atom_term { TermApp (get_info e1, e1, e2) }

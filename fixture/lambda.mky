@@ -1,7 +1,7 @@
-lambda x -> x;
-lambda x -> x x;
-lambda f -> lambda g -> f g;
-lambda f -> g h i;
-lambda f -> g (h i);
-(lambda x -> x) (lambda y -> y y); 
-(lambda x -> x x) (lambda y -> y); 
+x -> x;
+x -> x x;
+f -> g -> f g;
+f -> g h i;
+f -> g (h i);
+(x -> x) (y -> y y); 
+(x -> x x) (y -> y); 
