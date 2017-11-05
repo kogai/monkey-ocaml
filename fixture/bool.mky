@@ -1,4 +1,4 @@
-x -> x;
-x -> if true then x else x;
-x -> if x then true else false;
-x -> y -> if x then x else y;
+x: bool -> x;
+x: bool -> bool -> if x true then x else x;
+x: bool -> if x then true else false;
+x: bool -> y: bool -> if x then x else y;

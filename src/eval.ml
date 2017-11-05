@@ -46,7 +46,7 @@ let rec eval' env = Ast.(function
         | None -> raise @@ BindError (info, name)
         | Some x -> x
       )
-    | TermApp (info, TermAbs (_, name, term1), term2) ->
+    | TermApp (info, TermAbs (_, name, _, term1), term2) ->
       let closure = Environment.create (Some env) in
       Environment.set closure (eval' env term2) name;
       eval' closure term1 
@@ -55,7 +55,7 @@ let rec eval' env = Ast.(function
       let term2 = eval' env term2 in
       eval' env (TermApp (info, term1, term2))
     (* No rules to apply *)
-    | TermAbs (_, _, _) as x -> x
+    | TermAbs (_, _, _, _) as x -> x
     | _ -> raise EvaluateError
   )
 
@@ -68,9 +68,9 @@ let eval filename env lexbuf =
     | Lexer.SyntaxError msg as e ->
       Printf.fprintf stderr "%s%!" msg;
       raise @@ e
-    | Parser.Error ->
-      Printf.fprintf stderr "Syntax error! [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
-      raise @@ Parser.Error
+    | Parser.Error as e ->
+      Printf.fprintf stderr "Parse error [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
+      raise @@ e
     | BindError (info, name) as e ->
       Printf.fprintf stderr "Unbound error! [%s] @%s\n" name (Ast.show_info info);
       raise @@ e

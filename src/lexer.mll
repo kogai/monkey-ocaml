@@ -28,10 +28,12 @@ rule read =
   parse
   | white { read lexbuf }
   | newline { next_line lexbuf; read lexbuf }
-  | ";" { TERMINATE (info lexbuf) }
+  | ";" { SEMICORON (info lexbuf) }
+  | ":" { CORON (info lexbuf) }
   | "->" { ARROW (info lexbuf) }
   | "true" { BOOLEAN ((info lexbuf), true) }
   | "false" { BOOLEAN ((info lexbuf), false) }
+  | "bool" { TYPE_BOOLEAN (info lexbuf) }
   | "if" { IF (info lexbuf) }
   | "then" { THEN (info lexbuf) }
   | "else" { ELSE (info lexbuf) }
