@@ -2,15 +2,14 @@
   open Ast
   open Core
 %}
-%token <Ast.info> LAMBDA
 %token <Ast.info> ARROW
+%token <Ast.info> IF
+%token <Ast.info> THEN
+%token <Ast.info> ELSE
 
 %token <Ast.info * string> IDENTIFIER
-%token <Ast.info * float> NUMBER
 %token <Ast.info * bool> BOOLEAN
-%token <Ast.info * string> STRING
 
-%token <Ast.info> DQUOTE
 %token <Ast.info> PARENTHL
 %token <Ast.info> PARENTHR
 %token <Ast.info> TERMINATE
@@ -24,6 +23,7 @@ program:
   | v = term TERMINATE { Some v }
 term:
   | t = app_term { t }
+  | IF c = term THEN t1 = term ELSE t2 = term { TermIf ((get_info c), c, t1, t2) }
   | id = IDENTIFIER ARROW tm = term { TermAbs ((Tuple2.get1 id), (Tuple2.get2 id), tm) }
 app_term:
   | t = atom_term { t }
@@ -31,3 +31,4 @@ app_term:
 atom_term:
   | PARENTHL t = term PARENTHR { t }
   | id = IDENTIFIER { TermVar (Tuple2.get1 id, Tuple2.get2 id) }
+  | b = BOOLEAN { TermBool (Tuple2.get1 b, Tuple2.get2 b) }

@@ -1,0 +1,22 @@
+(Ast.TermAbs (("fixture/bool.mky", 1, 1), "x",
+   (Ast.TermVar (("fixture/bool.mky", 1, 6), "x"))))
+(Ast.TermAbs (("fixture/bool.mky", 2, 1), "x",
+   (Ast.TermIf (("fixture/bool.mky", 2, 12),
+      (Ast.TermBool (("fixture/bool.mky", 2, 12), true)),
+      (Ast.TermVar (("fixture/bool.mky", 2, 19), "x")),
+      (Ast.TermVar (("fixture/bool.mky", 2, 26), "x"))))
+   ))
+(Ast.TermAbs (("fixture/bool.mky", 3, 1), "x",
+   (Ast.TermIf (("fixture/bool.mky", 3, 9),
+      (Ast.TermVar (("fixture/bool.mky", 3, 9), "x")),
+      (Ast.TermBool (("fixture/bool.mky", 3, 19), true)),
+      (Ast.TermBool (("fixture/bool.mky", 3, 30), false))))
+   ))
+(Ast.TermAbs (("fixture/bool.mky", 4, 1), "x",
+   (Ast.TermAbs (("fixture/bool.mky", 4, 6), "y",
+      (Ast.TermIf (("fixture/bool.mky", 4, 14),
+         (Ast.TermVar (("fixture/bool.mky", 4, 14), "x")),
+         (Ast.TermVar (("fixture/bool.mky", 4, 21), "x")),
+         (Ast.TermVar (("fixture/bool.mky", 4, 28), "y"))))
+      ))
+   ))

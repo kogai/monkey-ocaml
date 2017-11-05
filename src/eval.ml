@@ -56,6 +56,7 @@ let rec eval' env = Ast.(function
       eval' env (TermApp (info, term1, term2))
     (* No rules to apply *)
     | TermAbs (_, _, _) as x -> x
+    | _ -> raise EvaluateError
   )
 
 let eval filename env lexbuf =

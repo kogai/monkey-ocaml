@@ -7,7 +7,7 @@ SRC_DIRS := "src"
 OCB_FLAGS := -use-ocamlfind -use-menhir -Is $(SRC_DIRS) -pkgs $(PKGS)
 OCB := ocamlbuild $(OCB_FLAGS)
 OPAM_VER := 4.03.0
-ARGS := "fixture/lambda.mky"
+ARGS := "fixture/bool.mky"
 
 all:$(NAME).native $(NAME).byte
 
