@@ -46,7 +46,7 @@ let rec eval' env = Ast.(function
         | None -> raise @@ BindError (info, name)
         | Some x -> x
       )
-    | TermApp (info, TermAbs (_, name, _, term1), term2) ->
+    | TermApp (info, TermAbs (_, name, ty, term1), term2) ->
       let closure = Environment.create (Some env) in
       Environment.set closure (eval' env term2) name;
       eval' closure term1 
@@ -54,9 +54,15 @@ let rec eval' env = Ast.(function
       let term1 = eval' env term1 in
       let term2 = eval' env term2 in
       eval' env (TermApp (info, term1, term2))
+    | TermIf (_, c, t1, t2) -> begin match eval' env c with
+        | TermBool (_, true) -> t1
+        | TermBool (_, false) -> t1
+        (* Raise error because condition clause could recieve only boolean *)
+        | _ -> raise EvaluateError
+      end
     (* No rules to apply *)
     | TermAbs (_, _, _, _) as x -> x
-    | _ -> raise EvaluateError
+    | TermBool (_, _) as x -> x
   )
 
 let eval filename env lexbuf =
@@ -73,6 +79,9 @@ let eval filename env lexbuf =
       raise @@ e
     | BindError (info, name) as e ->
       Printf.fprintf stderr "Unbound error! [%s] @%s\n" name (Ast.show_info info);
+      raise @@ e
+    | EvaluateError as e ->
+      Printf.fprintf stderr "Evaluate error [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
       raise @@ e
   in
   ast
