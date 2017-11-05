@@ -17,7 +17,7 @@ $(NAME).native: $(SRC_FILES)
 
 $(NAME).byte: $(SRC_FILES)
 	eval `opam config env` && \
-	$(OCB) $(NAME).byte
+	$(OCB) -tag debug $(NAME).byte
 
 .PHONY: native
 native: $(NAME).native
