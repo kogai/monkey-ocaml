@@ -23,10 +23,18 @@
 program:
   | EOF { None }
   | v = term SEMICORON { Some v }
+
 term:
   | t = app_term { t }
   | IF c = term THEN t1 = term ELSE t2 = term { TermIf ((get_info c), c, t1, t2) }
-  | id = IDENTIFIER ARROW CORON ty = typing tm = term { TermAbs ((Tuple2.get1 id), (Tuple2.get2 id), ty, tm) }
+  | PARENTHL
+    id = IDENTIFIER
+    CORON
+    ty = typing
+    PARENTHR
+    ARROW
+    tm = term
+    { TermAbs ((Tuple2.get1 id), (Tuple2.get2 id), ty, tm) }
 app_term:
   | t = atom_term { t }
   | e1 = app_term e2 = atom_term { TermApp (get_info e1, e1, e2) }
@@ -34,6 +42,7 @@ atom_term:
   | PARENTHL t = term PARENTHR { t }
   | id = IDENTIFIER { TermVar (Tuple2.get1 id, Tuple2.get2 id) }
   | b = BOOLEAN { TermBool (Tuple2.get1 b, Tuple2.get2 b) }
+
 typing:
   | t = arrow_typing { t }
 arrow_typing:
