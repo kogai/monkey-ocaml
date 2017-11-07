@@ -3,12 +3,13 @@ open Ast
 
 exception TypeError of info * string
 
-let rec typeof' env = function
-  | TermVar (info, name) -> raise @@ TypeError (info, "")
-  | TermAbs (info, name, ty, term) -> raise @@ TypeError (info, "")
-  | TermApp (info, term1, term2) -> raise @@ TypeError (info, "")
-  | TermIf (info, condition, term1, term2) -> raise @@ TypeError (info, "")
-  | TermBool (info, value) -> raise @@ TypeError (info, "")
+(* let from_env name env = match Eval.Environment.get name env with *)
+(* () *)
 
-let typeof env ast =
-  typeof' env ast
+(* let getTypeFromContext fi ctx i =
+   match getbinding fi ctx i with
+      VarBind(tyT) -> tyT
+    | _ -> error fi 
+      ("getTypeFromContext: Wrong kind of binding for variable " 
+       ^ (index2name fi ctx i))  *)
+

@@ -3,19 +3,20 @@ open Lexing
 
 exception EvaluateError
 exception BindError of Ast.info * string 
+exception TypeError of Ast.info * string
 
-module Environment : sig
+module Environment (Impl : sig type t end) : sig
   type t = {
-    store: (string, Ast.t) Hashtbl.t;
+    store: (string, Impl.t) Hashtbl.t;
     outer: t option;
   }
   val create: (t option) -> t
   val empty: t
-  val get: string -> t-> Ast.t option
-  val set: t -> Ast.t -> string -> unit
+  val get: string -> t-> Impl.t option
+  val set: t -> Impl.t -> string -> unit
 end = struct
   type t = {
-    store: (string, Ast.t) Hashtbl.t;
+    store: (string, Impl.t) Hashtbl.t;
     outer: t option;
   }
 
@@ -36,19 +37,60 @@ end = struct
     Hashtbl.set env.store ~key ~data;
 end
 
+module TypeEnv = Environment(struct
+    type t = Ast.ty
+  end)
+
+module ValueEnv = Environment(struct
+    type t = Ast.t
+  end)
+
+let rec typeof' env = Ast.(function
+    | TermVar (info, name) -> (match TypeEnv.get name env with
+        | None -> raise @@ BindError (info, name)
+        | Some x -> x
+      )
+    | TermAbs (info, name, ty1, term) ->
+      TypeEnv.set env ty1 name;
+      Arrow (ty1, (typeof' env term))
+    | TermApp (info, term1, term2) ->
+      let ty1 = typeof' env term1 in
+      let ty2 = typeof' env term2 in
+      (match ty1 with
+       | Arrow (ty1', ty2') ->
+         if ty1' = ty2
+         then ty2'
+         else raise @@ TypeError (info, "Type mismatch!")
+       | _ ->
+         raise @@ TypeError (info, "Arrow type expected!"))
+    | TermIf (info, condition, term1, term2) -> (match typeof' env condition with
+        | Boolean ->
+          let ty1 = typeof' env term1 in
+          let ty2 = typeof' env term2 in
+          if ty1 = ty2
+          then ty2
+          else raise @@ TypeError (info, "Alternative clause has type mismatch")
+        | _ -> raise @@ TypeError (info, "Condition clause not boolean")
+      )
+    | TermBool (info, value) -> Boolean)
+
+let typeof env ast =
+  ignore @@ typeof' env ast;
+  ast
+
 let rec parse lexbuf =
   match Parser.program Lexer.read lexbuf with
   | None -> []
   | Some statement -> statement::(parse lexbuf)
 
 let rec eval' env = Ast.(function
-    | TermVar (info, name) -> (match Environment.get name env with
+    | TermVar (info, name) -> (match ValueEnv.get name env with
         | None -> raise @@ BindError (info, name)
         | Some x -> x
       )
     | TermApp (info, TermAbs (_, name, ty, term1), term2) ->
-      let closure = Environment.create (Some env) in
-      Environment.set closure (eval' env term2) name;
+      let closure = ValueEnv.create (Some env) in
+      ValueEnv.set closure (eval' env term2) name;
       eval' closure term1 
     | TermApp (info, term1, term2) ->
       let term1 = eval' env term1 in
@@ -65,13 +107,13 @@ let rec eval' env = Ast.(function
     | TermBool (_, _) as x -> x
   )
 
-let eval filename env lexbuf =
+let eval filename lexbuf =
   lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
   try
     lexbuf
     |> parse
-    |> List.map ~f:(Typing.typeof env)
-    |> List.map ~f:(eval' env)
+    |> List.map ~f:(typeof TypeEnv.empty)
+    |> List.map ~f:(eval' ValueEnv.empty)
   with
   | Lexer.SyntaxError msg as e ->
     Printf.fprintf stderr "%s%!" msg;
