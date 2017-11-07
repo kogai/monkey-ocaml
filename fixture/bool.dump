@@ -1,8 +1,8 @@
-(Ast.TermAbs (("fixture/bool.mky", 1, 2), "x", Typing.Boolean,
+(Ast.TermAbs (("fixture/bool.mky", 1, 2), "x", Ast.Boolean,
    (Ast.TermVar (("fixture/bool.mky", 1, 14), "x"))))
 (Ast.TermBool (("fixture/bool.mky", 2, 21), true))
 (Ast.TermAbs (("fixture/bool.mky", 3, 2), "x",
-   (Typing.Arrow (Typing.Boolean, Typing.Boolean)),
+   (Ast.Arrow (Ast.Boolean, Ast.Boolean)),
    (Ast.TermIf (("fixture/bool.mky", 3, 25),
       (Ast.TermApp (("fixture/bool.mky", 3, 25),
          (Ast.TermVar (("fixture/bool.mky", 3, 25), "x")),
@@ -10,14 +10,14 @@
       (Ast.TermVar (("fixture/bool.mky", 3, 37), "x")),
       (Ast.TermVar (("fixture/bool.mky", 3, 44), "x"))))
    ))
-(Ast.TermAbs (("fixture/bool.mky", 4, 2), "x", Typing.Boolean,
+(Ast.TermAbs (("fixture/bool.mky", 4, 2), "x", Ast.Boolean,
    (Ast.TermIf (("fixture/bool.mky", 4, 17),
       (Ast.TermVar (("fixture/bool.mky", 4, 17), "x")),
       (Ast.TermBool (("fixture/bool.mky", 4, 27), true)),
       (Ast.TermBool (("fixture/bool.mky", 4, 38), false))))
    ))
-(Ast.TermAbs (("fixture/bool.mky", 5, 2), "x", Typing.Boolean,
-   (Ast.TermAbs (("fixture/bool.mky", 5, 15), "y", Typing.Boolean,
+(Ast.TermAbs (("fixture/bool.mky", 5, 2), "x", Ast.Boolean,
+   (Ast.TermAbs (("fixture/bool.mky", 5, 15), "y", Ast.Boolean,
       (Ast.TermIf (("fixture/bool.mky", 5, 30),
          (Ast.TermVar (("fixture/bool.mky", 5, 30), "x")),
          (Ast.TermVar (("fixture/bool.mky", 5, 37), "x")),

@@ -46,8 +46,8 @@ atom_term:
 typing:
   | t = arrow_typing { t }
 arrow_typing:
-  | t1 = atom_typing ARROW t2 = arrow_typing { Typing.Arrow (t1, t2) }
+  | t1 = atom_typing ARROW t2 = arrow_typing { Ast.Arrow (t1, t2) }
   | t = atom_typing { t }
 atom_typing:
   | PARENTHL t = typing PARENTHR { t }
-  | TYPE_BOOLEAN { Typing.Boolean }
+  | TYPE_BOOLEAN { Ast.Boolean }

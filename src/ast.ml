@@ -5,9 +5,14 @@ type info = string * int * int
 let show_info (file, line, column) = Core.sprintf "%s:%d:%d" file line column
 let create_info file line column = (file, line, column)
 
+type ty =
+  | Arrow of ty * ty
+  | Boolean
+[@@deriving show]
+
 type t =
   | TermVar of info * string
-  | TermAbs of info * string * Typing.t * t
+  | TermAbs of info * string * ty * t
   | TermApp of info * t * t
   | TermIf of info * t * t * t
   | TermBool of info * bool

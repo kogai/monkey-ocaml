@@ -67,21 +67,24 @@ let rec eval' env = Ast.(function
 
 let eval filename env lexbuf =
   lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
-  let ast =
-    try
-      List.map ~f:(eval' env) (parse lexbuf)
-    with
-    | Lexer.SyntaxError msg as e ->
-      Printf.fprintf stderr "%s%!" msg;
-      raise @@ e
-    | Parser.Error as e ->
-      Printf.fprintf stderr "Parse error [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
-      raise @@ e
-    | BindError (info, name) as e ->
-      Printf.fprintf stderr "Unbound error! [%s] @%s\n" name (Ast.show_info info);
-      raise @@ e
-    | EvaluateError as e ->
-      Printf.fprintf stderr "Evaluate error [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
-      raise @@ e
-  in
-  ast
+  try
+    lexbuf
+    |> parse
+    |> List.map ~f:(Typing.typeof env)
+    |> List.map ~f:(eval' env)
+  with
+  | Lexer.SyntaxError msg as e ->
+    Printf.fprintf stderr "%s%!" msg;
+    raise @@ e
+  | Parser.Error as e ->
+    Printf.fprintf stderr "Parse error [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
+    raise @@ e
+  | BindError (info, name) as e ->
+    Printf.fprintf stderr "Unbound error! [%s] @%s\n" name (Ast.show_info info);
+    raise @@ e
+  | Typing.TypeError (info, reason) as e ->
+    Printf.fprintf stderr "Type error! [%s] @%s\n" reason (Ast.show_info info);
+    raise @@ e
+  | EvaluateError as e ->
+    Printf.fprintf stderr "Evaluate error [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));
+    raise @@ e
