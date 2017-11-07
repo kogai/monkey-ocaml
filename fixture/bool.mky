@@ -3,3 +3,7 @@
 (x: bool -> bool) -> if x true then x else x;
 (x: bool) -> if x then true else false;
 (x: bool) -> (y: bool) -> if x then x else y;
+
+(x: bool -> bool) -> if x true then x else false;
+(x: bool -> bool) -> if x then true else false;
+((x: bool) -> x) ((x: bool) -> x);
