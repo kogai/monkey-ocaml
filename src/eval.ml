@@ -124,7 +124,7 @@ let eval filename lexbuf =
   | BindError (info, name) as e ->
     Printf.fprintf stderr "Unbound error! [%s] @%s\n" name (Ast.show_info info);
     raise @@ e
-  | Typing.TypeError (info, reason) as e ->
+  | TypeError (info, reason) as e ->
     Printf.fprintf stderr "Type error! [%s] @%s\n" reason (Ast.show_info info);
     raise @@ e
   | EvaluateError as e ->
