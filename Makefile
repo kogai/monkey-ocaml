@@ -7,7 +7,7 @@ SRC_DIRS := "src"
 OCB_FLAGS := -use-ocamlfind -use-menhir -Is $(SRC_DIRS) -pkgs $(PKGS)
 OCB := ocamlbuild $(OCB_FLAGS)
 OPAM_VER := 4.03.0
-ARGS := "fixture/lambda.mky"
+ARGS := "fixture/bool.mky"
 
 all:$(NAME).native $(NAME).byte
 
@@ -17,7 +17,7 @@ $(NAME).native: $(SRC_FILES)
 
 $(NAME).byte: $(SRC_FILES)
 	eval `opam config env` && \
-	$(OCB) $(NAME).byte
+	$(OCB) -tag debug $(NAME).byte
 
 .PHONY: native
 native: $(NAME).native
