@@ -1,3 +1,0 @@
-Type error! [fixture/bool.mky:7:25] @Condition clause not boolean
-Type error! [fixture/bool.mky:8:25] @Alternative clause has type mismatch
-Type error! [fixture/bool.mky:9:3] @Type mismatch!

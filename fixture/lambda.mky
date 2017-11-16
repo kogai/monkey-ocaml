@@ -1,7 +1,0 @@
-x -> x;
-x -> x x;
-f -> g -> f g;
-f -> g h i;
-f -> g (h i);
-(x -> x) (y -> y y); 
-(x -> x x) (y -> y); 
