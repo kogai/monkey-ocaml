@@ -75,37 +75,17 @@ let rec typeof' env = Ast.(function
     | TermBool (info, value) -> Boolean)
 
 let typeof env ast =
-  ignore @@ typeof' env ast;
-  ast
+  try
+    ignore @@ typeof' env ast;
+    None
+  with
+  | TypeError (info, reason) ->
+    Some (info, reason)
 
 let rec parse lexbuf =
   match Parser.program Lexer.read lexbuf with
   | None -> []
   | Some statement -> statement::(parse lexbuf)
-
-let rec eval' env = Ast.(function
-    | TermVar (info, name) -> (match ValueEnv.get name env with
-        | None -> raise @@ BindError (info, name)
-        | Some x -> x
-      )
-    | TermApp (info, TermAbs (_, name, ty, term1), term2) ->
-      let closure = ValueEnv.create (Some env) in
-      ValueEnv.set closure (eval' env term2) name;
-      eval' closure term1 
-    | TermApp (info, term1, term2) ->
-      let term1 = eval' env term1 in
-      let term2 = eval' env term2 in
-      eval' env (TermApp (info, term1, term2))
-    | TermIf (_, c, t1, t2) -> begin match eval' env c with
-        | TermBool (_, true) -> t1
-        | TermBool (_, false) -> t1
-        (* Raise error because condition clause could recieve only boolean *)
-        | _ -> raise EvaluateError
-      end
-    (* No rules to apply *)
-    | TermAbs (_, _, _, _) as x -> x
-    | TermBool (_, _) as x -> x
-  )
 
 let eval filename lexbuf =
   lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
@@ -113,7 +93,6 @@ let eval filename lexbuf =
     lexbuf
     |> parse
     |> List.map ~f:(typeof TypeEnv.empty)
-    |> List.map ~f:(eval' ValueEnv.empty)
   with
   | Lexer.SyntaxError msg as e ->
     Printf.fprintf stderr "%s%!" msg;
@@ -123,9 +102,6 @@ let eval filename lexbuf =
     raise @@ e
   | BindError (info, name) as e ->
     Printf.fprintf stderr "Unbound error! [%s] @%s\n" name (Ast.show_info info);
-    raise @@ e
-  | TypeError (info, reason) as e ->
-    Printf.fprintf stderr "Type error! [%s] @%s\n" reason (Ast.show_info info);
     raise @@ e
   | EvaluateError as e ->
     Printf.fprintf stderr "Evaluate error [%s] @%s\n" (Lexing.lexeme lexbuf) (Ast.show_info (Lexer.info lexbuf));

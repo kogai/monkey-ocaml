@@ -4,10 +4,13 @@ open Lexing
 
 exception Unreachable
 
-let to_string statements =
-  statements
-  |> List.map ~f:Ast.show
-  |> String.concat ~sep:"\n"
+let to_string reasons =
+  reasons
+  |> List.fold ~init:"" ~f:(fun acc -> function
+      | Some (info, reason) ->
+        sprintf "%sType error! [%s] @%s\n" acc (Ast.show_info info) reason
+      | None -> acc
+    )
 
 let write path content =
   let filename = match Filename.split_extension path with
