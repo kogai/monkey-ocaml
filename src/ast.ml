@@ -7,6 +7,7 @@ let create_info file line column = (file, line, column)
 
 type ty =
   | Arrow of ty * ty
+  | Nat
   | Boolean
 [@@deriving show]
 
@@ -16,10 +17,12 @@ type t =
   | TermApp of info * t * t
   | TermIf of info * t * t * t
   | TermBool of info * bool
+  | TermNat of info * int
 [@@deriving show]
 
 let get_info = function
   | TermVar (i, _) 
+  | TermNat (i, _)
   | TermBool (i, _)
     -> i
   | TermApp (i, _, _)

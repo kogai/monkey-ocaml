@@ -22,6 +22,7 @@ let next_line lexbuf =
 
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
+let digit = ['0'-'9'] ['0'-'9']* 
 let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 
 rule read =
@@ -34,9 +35,14 @@ rule read =
   | "true" { BOOLEAN ((info lexbuf), true) }
   | "false" { BOOLEAN ((info lexbuf), false) }
   | "bool" { TYPE_BOOLEAN (info lexbuf) }
+  | "nat" { TYPE_NAT (info lexbuf) }
   | "if" { IF (info lexbuf) }
   | "then" { THEN (info lexbuf) }
   | "else" { ELSE (info lexbuf) }
+  | digit { NAT (
+    (info lexbuf),
+    (int_of_string (identifier lexbuf))
+  )}
   | id { IDENTIFIER ((info lexbuf), (identifier lexbuf)) }
   | '(' { PARENTHL (info lexbuf) }
   | ')' { PARENTHR (info lexbuf) }

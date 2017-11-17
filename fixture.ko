@@ -8,4 +8,6 @@
 (x: bool -> bool) -> if x true then x else false;
 ((x: bool) -> x) ((x: bool) -> x);
 
-(x: Nat -> x) 10
+((x: nat) -> x) 100;
+((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) 99;
+((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) true;

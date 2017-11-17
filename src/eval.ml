@@ -72,7 +72,9 @@ let rec typeof' env = Ast.(function
           else raise @@ TypeError (info, "Alternative clause has type mismatch")
         | _ -> raise @@ TypeError (info, "Condition clause not boolean")
       )
-    | TermBool (info, value) -> Boolean)
+    | TermBool (info, value) -> Boolean
+    | TermNat (info, value) -> Nat
+  )
 
 let typeof env ast =
   try
