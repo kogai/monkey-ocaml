@@ -1,5 +1,10 @@
+(x: (nat, bool)) -> x;
+((x: (nat, bool)) -> x) (100, true);
+((x: (nat, bool)) -> x) (true, 100);
+((x: (nat, bool)) -> x) (true, 100, ());
+
 (*
-今後実装するlet束縛
+今後実装したい
 let id (x:nat) = x
 let curried (x:nat -> nat) (y:nat) = x y
 *)

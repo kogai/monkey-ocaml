@@ -19,6 +19,7 @@
 %token <Ast.info> PARENTHR
 %token <Ast.info> SEMICORON
 %token <Ast.info> CORON
+%token <Ast.info> COMMA
 %token <Ast.info> EOF
 %start <Ast.t option> program
 
@@ -43,6 +44,7 @@ app_term:
   | t = atom_term { t }
   | e1 = app_term e2 = atom_term { TermApp (get_info e1, e1, e2) }
 atom_term:
+  | i = PARENTHL t = separated_list(COMMA, term) PARENTHR { TermTuple (i, t) }
   | PARENTHL t = term PARENTHR { t }
   | id = IDENTIFIER { TermVar (Tuple2.get1 id, Tuple2.get2 id) }
   | n = NAT { TermNat (Tuple2.get1 n, Tuple2.get2 n) }
@@ -55,6 +57,7 @@ arrow_typing:
   | t1 = atom_typing ARROW t2 = arrow_typing { Ast.Arrow (t1, t2) }
   | t = atom_typing { t }
 atom_typing:
+  | PARENTHL t = separated_list(COMMA, typing) PARENTHR { Tuple t }
   | PARENTHL t = typing PARENTHR { t }
   | TYPE_BOOLEAN { Ast.Boolean }
   | TYPE_NAT { Ast.Nat }

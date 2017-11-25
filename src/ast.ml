@@ -10,6 +10,7 @@ type ty =
   | Nat
   | Boolean
   | Unit
+  | Tuple of ty list
 [@@deriving show]
 
 type t =
@@ -20,13 +21,15 @@ type t =
   | TermBool of info * bool
   | TermNat of info * int
   | TermUnit of info
+  | TermTuple of info * t list
 [@@deriving show]
 
 let get_info = function
-  | TermUnit (i) -> i
+  | TermUnit i -> i
   | TermVar (i, _) 
   | TermNat (i, _)
   | TermBool (i, _)
+  | TermTuple (i, _)
     -> i
   | TermApp (i, _, _)
     -> i
@@ -36,6 +39,11 @@ let get_info = function
 
 let rec string_of_type = function
   | Arrow (ty1, ty2) -> Printf.sprintf "%s -> %s" (string_of_type ty1) (string_of_type ty2)
+  | Tuple ts -> ts
+                |> Core.List.map ~f:string_of_type
+                |> Core.String.concat ~sep:", "
+                |> Printf.sprintf "(%s)"
+
   | Nat -> "nat"
   | Boolean -> "bool"
   | Unit -> "()"

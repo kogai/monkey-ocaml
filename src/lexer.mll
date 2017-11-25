@@ -52,6 +52,7 @@ rule read =
   | id { IDENTIFIER ((info lexbuf), (identifier lexbuf)) }
   | '(' { PARENTHL (info lexbuf) }
   | ')' { PARENTHR (info lexbuf) }
+  | ',' { COMMA (info lexbuf) }
   | _ { raise (SyntaxError (sprintf "Unexpected character: [%s]" (Lexing.lexeme lexbuf))) }
   | eof { EOF (info lexbuf) }
 
