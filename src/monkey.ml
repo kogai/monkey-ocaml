@@ -11,6 +11,7 @@ let to_string reasons =
         (sprintf "! %s [%s]" reason (Ast.show_info info))::acc
       | None -> acc
     )
+  |> List.rev
   |> String.concat ~sep:"\n"
 
 let write path content =
