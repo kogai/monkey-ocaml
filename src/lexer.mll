@@ -35,6 +35,7 @@ rule read =
   | '{' { BRACEL (info lexbuf) }
   | '}' { BRACER (info lexbuf) }
   | '=' { EQUAL (info lexbuf) }
+  | '*' { STAR (info lexbuf) }
   | "->" { ARROW (info lexbuf) }
   | "true" { BOOLEAN ((info lexbuf), true) }
   | "false" { BOOLEAN ((info lexbuf), false) }

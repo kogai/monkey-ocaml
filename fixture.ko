@@ -5,21 +5,24 @@
   let y = x true in
   y;
 
-(x: {a:nat, b:bool}) -> x;
-((x: {a:nat, b:bool}) -> x) {a:100, b:true};
-((x: {a:nat, b:bool}) -> x) {a:true, b:100};
+(x: {a:nat * b:bool}) -> x;
+((x: {a:nat * b:bool}) -> x) {a:100, b:true};
+((x: {a:nat * b:bool}) -> x) {a:true, b:100};
 
-(x: (nat, bool)) -> x;
-((x: (nat, bool)) -> x) (100, true);
-((x: (nat, bool)) -> x) (true, 100);
-((x: (nat, bool)) -> x) (true, 100, ());
+(x: (nat * bool)) -> x;
+((x: (nat * bool)) -> x) (100, true);
+((x: (nat * bool)) -> x) (true, 100);
+((x: (nat * bool)) -> x) (true, 100, ());
 
 (*
 コメント
 
-グローバルとローカルの束縛を分けたい
+グローバルとローカルの束縛の表現を分けたい
 def id (x:nat) = x
 def curried (x:nat -> nat) (y:nat) = x y
+
+文字列のサポートはリストの実装後
+文字型のリストとして表現したいので
 *)
 
 ((f: nat -> unit) -> f) ((x: nat) -> ());

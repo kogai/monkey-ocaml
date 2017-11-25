@@ -25,6 +25,7 @@
 %token <Ast.info> SEMICORON
 %token <Ast.info> CORON
 %token <Ast.info> COMMA
+%token <Ast.info> STAR
 %token <Ast.info> EOF
 %start <Ast.t option> program
 
@@ -66,8 +67,8 @@ arrow_typing:
   | t1 = atom_typing ARROW t2 = arrow_typing { Ast.Arrow (t1, t2) }
   | t = atom_typing { t }
 atom_typing:
-  | BRACEL t = separated_list(COMMA, record_field_typing) BRACER { Record t }
-  | PARENTHL t = separated_list(COMMA, typing) PARENTHR { Tuple t }
+  | BRACEL t = separated_list(STAR, record_field_typing) BRACER { Record t }
+  | PARENTHL t = separated_list(STAR, typing) PARENTHR { Tuple t }
   | PARENTHL t = typing PARENTHR { t }
   | TYPE_BOOLEAN { Ast.Boolean }
   | TYPE_NAT { Ast.Nat }

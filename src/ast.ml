@@ -46,11 +46,11 @@ let rec string_of_type = function
   | Arrow (ty1, ty2) -> Printf.sprintf "%s -> %s" (string_of_type ty1) (string_of_type ty2)
   | Record ts -> ts
                  |> Core.List.map ~f:(fun (n, t) -> Printf.sprintf "%s: %s" n (string_of_type t))
-                 |> Core.String.concat ~sep:", "
+                 |> Core.String.concat ~sep:" * "
                  |> Printf.sprintf "{ %s }"
   | Tuple ts -> ts
                 |> Core.List.map ~f:string_of_type
-                |> Core.String.concat ~sep:", "
+                |> Core.String.concat ~sep:" * "
                 |> Printf.sprintf "(%s)"
 
   | Nat -> "nat"
