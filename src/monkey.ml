@@ -8,7 +8,7 @@ let to_string reasons =
   reasons
   |> List.fold ~init:"" ~f:(fun acc -> function
       | Some (info, reason) ->
-        sprintf "%sType error! [%s] @%s\n" acc (Ast.show_info info) reason
+        sprintf "%s! %s [%s]\n" acc reason (Ast.show_info info)
       | None -> acc
     )
 

@@ -60,17 +60,31 @@ let rec typeof' env = Ast.(function
        | Arrow (ty1', ty2') ->
          if ty1' = ty2
          then ty2'
-         else raise @@ TypeError (info, "Type mismatch!")
+         else
+           let reason = Printf.sprintf
+               "[%s] and [%s] are imcompatible."
+               (string_of_type ty1')
+               (string_of_type ty2)
+           in
+           raise @@ TypeError (info, reason)
        | _ ->
-         raise @@ TypeError (info, "Arrow type expected!"))
+         raise @@ TypeError (info, "Arrow type expected"))
     | TermIf (info, condition, term1, term2) -> (match typeof' env condition with
         | Boolean ->
           let ty1 = typeof' env term1 in
           let ty2 = typeof' env term2 in
           if ty1 = ty2
           then ty2
-          else raise @@ TypeError (info, "Alternative clause has type mismatch")
-        | _ -> raise @@ TypeError (info, "Condition clause not boolean")
+          else
+            let reason = Printf.sprintf
+                "[%s] and [%s] which defined at alternative clause are imcompatible."
+                (string_of_type ty1)
+                (string_of_type ty2)
+            in
+            raise @@ TypeError (info, reason)
+        | t -> raise @@ TypeError (
+            info,
+            Printf.sprintf "[%s] which defined at condition clause isn't boolean" (string_of_type t))
       )
     | TermBool (info, value) -> Boolean
     | TermNat (info, value) -> Nat

@@ -33,3 +33,9 @@ let get_info = function
   | TermAbs (i, _, _, _)
   | TermIf (i, _, _, _)
     -> i
+
+let rec string_of_type = function
+  | Arrow (ty1, ty2) -> Printf.sprintf "%s -> %s" (string_of_type ty1) (string_of_type ty2)
+  | Nat -> "nat"
+  | Boolean -> "bool"
+  | Unit -> "()"
