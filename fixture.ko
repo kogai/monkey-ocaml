@@ -1,16 +1,22 @@
-(x: bool) -> x;
-((x: bool) -> x) true;
-(x: bool -> bool) -> if x true then x else x;
-(x: bool) -> if x then true else false;
-(x: bool) -> (y: bool) -> if x then x else y;
+(*
+今後実装するlet束縛
+let id (x:nat) = x
+let curried (x:nat -> nat) (y:nat) = x y
+*)
 
-(x: bool -> bool) -> if x then true else false;
-(x: bool -> bool) -> if x true then x else false;
-((x: bool) -> x) ((x: bool) -> x);
+((f: nat -> unit) -> f) ((x: nat) -> ());
+((f: nat -> unit) -> f) ((x: nat) -> x);
 
 ((x: nat) -> x) 100;
 ((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) 99;
 ((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) true;
 
-((f: nat -> unit) -> f) ((x: nat) -> ());
-((f: nat -> unit) -> f) ((x: nat) -> x);
+(x: bool -> bool) -> if x then true else false;
+(x: bool -> bool) -> if x true then x else false;
+((x: bool) -> x) ((x: bool) -> x);
+
+(x: bool) -> x;
+((x: bool) -> x) true;
+(x: bool -> bool) -> if x true then x else x;
+(x: bool) -> if x then true else false;
+(x: bool) -> (y: bool) -> if x then x else y;
