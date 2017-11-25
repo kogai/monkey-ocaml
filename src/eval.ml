@@ -10,6 +10,7 @@ module Environment (Impl : sig type t end) : sig
     store: (string, Impl.t) Hashtbl.t;
     outer: t option;
   }
+  (* FIXME: Lack of separate environment *)
   val create: (t option) -> t
   val empty: t
   val get: string -> t-> Impl.t option
@@ -53,6 +54,10 @@ let rec typeof' env = Ast.(function
     | TermAbs (info, name, ty1, term) ->
       TypeEnv.set env ty1 name;
       Arrow (ty1, (typeof' env term))
+    | TermLet (info, name, t1, t2) ->
+      let ty1 = typeof' env t1 in
+      TypeEnv.set env ty1 name;
+      Arrow (ty1, (typeof' env t2))
     | TermApp (info, term1, term2) ->
       let ty1 = typeof' env term1 in
       let ty2 = typeof' env term2 in

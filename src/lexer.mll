@@ -34,6 +34,7 @@ rule read =
   | ':' { CORON (info lexbuf) }
   | '{' { BRACEL (info lexbuf) }
   | '}' { BRACER (info lexbuf) }
+  | '=' { EQUAL (info lexbuf) }
   | "->" { ARROW (info lexbuf) }
   | "true" { BOOLEAN ((info lexbuf), true) }
   | "false" { BOOLEAN ((info lexbuf), false) }
@@ -42,6 +43,9 @@ rule read =
   | "else" { ELSE (info lexbuf) }
   | "()" { UNIT (info lexbuf) }
   | "(*" { comment lexbuf; read lexbuf }
+
+  | "let" { LET (info lexbuf) }
+  | "in" { IN (info lexbuf) }
 
   | "bool" { TYPE_BOOLEAN (info lexbuf) }
   | "nat" { TYPE_NAT (info lexbuf) }

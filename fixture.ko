@@ -1,3 +1,10 @@
+(x: nat -> bool) ->
+  let y = x 100 in
+  y;
+(x: nat -> bool) ->
+  let y = x true in
+  y;
+
 (x: {a:nat, b:bool}) -> x;
 ((x: {a:nat, b:bool}) -> x) {a:100, b:true};
 ((x: {a:nat, b:bool}) -> x) {a:true, b:100};
@@ -8,9 +15,11 @@
 ((x: (nat, bool)) -> x) (true, 100, ());
 
 (*
-今後実装したい
-let id (x:nat) = x
-let curried (x:nat -> nat) (y:nat) = x y
+コメント
+
+グローバルとローカルの束縛を分けたい
+def id (x:nat) = x
+def curried (x:nat -> nat) (y:nat) = x y
 *)
 
 ((f: nat -> unit) -> f) ((x: nat) -> ());
