@@ -6,11 +6,12 @@ exception Unreachable
 
 let to_string reasons =
   reasons
-  |> List.fold ~init:"" ~f:(fun acc -> function
+  |> List.fold ~init:[] ~f:(fun acc -> function
       | Some (info, reason) ->
-        sprintf "%s! %s [%s]\n" acc reason (Ast.show_info info)
+        (sprintf "! %s [%s]" reason (Ast.show_info info))::acc
       | None -> acc
     )
+  |> String.concat ~sep:"\n"
 
 let write path content =
   let filename = match Filename.split_extension path with
