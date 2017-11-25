@@ -1,3 +1,7 @@
+(x: {a:nat, b:bool}) -> x;
+((x: {a:nat, b:bool}) -> x) {a:100, b:true};
+((x: {a:nat, b:bool}) -> x) {a:true, b:100};
+
 (x: (nat, bool)) -> x;
 ((x: (nat, bool)) -> x) (100, true);
 ((x: (nat, bool)) -> x) (true, 100);

@@ -17,6 +17,8 @@
 
 %token <Ast.info> PARENTHL
 %token <Ast.info> PARENTHR
+%token <Ast.info> BRACEL
+%token <Ast.info> BRACER
 %token <Ast.info> SEMICORON
 %token <Ast.info> CORON
 %token <Ast.info> COMMA
@@ -44,12 +46,15 @@ app_term:
   | t = atom_term { t }
   | e1 = app_term e2 = atom_term { TermApp (get_info e1, e1, e2) }
 atom_term:
+  | i = BRACEL t = separated_list(COMMA, record_field) BRACER { TermRecord (i, t) }
   | i = PARENTHL t = separated_list(COMMA, term) PARENTHR { TermTuple (i, t) }
   | PARENTHL t = term PARENTHR { t }
   | id = IDENTIFIER { TermVar (Tuple2.get1 id, Tuple2.get2 id) }
   | n = NAT { TermNat (Tuple2.get1 n, Tuple2.get2 n) }
   | b = BOOLEAN { TermBool (Tuple2.get1 b, Tuple2.get2 b) }
   | u = UNIT { TermUnit u }
+record_field:
+  | label = IDENTIFIER CORON value = term { (Tuple2.get2 label, value) }
 
 typing:
   | t = arrow_typing { t }
@@ -57,8 +62,11 @@ arrow_typing:
   | t1 = atom_typing ARROW t2 = arrow_typing { Ast.Arrow (t1, t2) }
   | t = atom_typing { t }
 atom_typing:
+  | BRACEL t = separated_list(COMMA, record_field_typing) BRACER { Record t }
   | PARENTHL t = separated_list(COMMA, typing) PARENTHR { Tuple t }
   | PARENTHL t = typing PARENTHR { t }
   | TYPE_BOOLEAN { Ast.Boolean }
   | TYPE_NAT { Ast.Nat }
   | TYPE_UNIT { Ast.Unit }
+record_field_typing:
+  | label = IDENTIFIER CORON value = typing { (Tuple2.get2 label, value) }

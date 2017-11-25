@@ -53,9 +53,6 @@ let rec typeof' env = Ast.(function
     | TermAbs (info, name, ty1, term) ->
       TypeEnv.set env ty1 name;
       Arrow (ty1, (typeof' env term))
-    | TermTuple (info, terms) ->
-      let tys = List.map ~f:(typeof' env) terms in
-      Tuple tys
     | TermApp (info, term1, term2) ->
       let ty1 = typeof' env term1 in
       let ty2 = typeof' env term2 in
@@ -89,6 +86,12 @@ let rec typeof' env = Ast.(function
             info,
             Printf.sprintf "[%s] which defined at condition clause isn't boolean" (string_of_type t))
       )
+    | TermTuple (info, terms) ->
+      let tys = List.map ~f:(typeof' env) terms in
+      Tuple tys
+    | TermRecord (info, terms) ->
+      let tys = List.map ~f:(fun (label, t) -> (label, (typeof' env t))) terms in
+      Record tys
     | TermBool _ -> Boolean
     | TermNat _ -> Nat
     | TermUnit _ -> Unit

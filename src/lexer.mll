@@ -32,6 +32,8 @@ rule read =
   | newline { next_line lexbuf; read lexbuf }
   | ';' { SEMICORON (info lexbuf) }
   | ':' { CORON (info lexbuf) }
+  | '{' { BRACEL (info lexbuf) }
+  | '}' { BRACER (info lexbuf) }
   | "->" { ARROW (info lexbuf) }
   | "true" { BOOLEAN ((info lexbuf), true) }
   | "false" { BOOLEAN ((info lexbuf), false) }
