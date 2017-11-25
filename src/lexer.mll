@@ -34,11 +34,15 @@ rule read =
   | "->" { ARROW (info lexbuf) }
   | "true" { BOOLEAN ((info lexbuf), true) }
   | "false" { BOOLEAN ((info lexbuf), false) }
-  | "bool" { TYPE_BOOLEAN (info lexbuf) }
-  | "nat" { TYPE_NAT (info lexbuf) }
   | "if" { IF (info lexbuf) }
   | "then" { THEN (info lexbuf) }
   | "else" { ELSE (info lexbuf) }
+  | "()" { UNIT (info lexbuf) }
+
+  | "bool" { TYPE_BOOLEAN (info lexbuf) }
+  | "nat" { TYPE_NAT (info lexbuf) }
+  | "unit" { TYPE_UNIT (info lexbuf) }
+
   | digit { NAT (
     (info lexbuf),
     (int_of_string (identifier lexbuf))

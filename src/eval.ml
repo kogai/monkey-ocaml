@@ -74,6 +74,7 @@ let rec typeof' env = Ast.(function
       )
     | TermBool (info, value) -> Boolean
     | TermNat (info, value) -> Nat
+    | TermUnit (info) -> Unit
   )
 
 let typeof env ast =

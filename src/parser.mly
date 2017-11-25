@@ -8,10 +8,12 @@
 %token <Ast.info> ELSE
 %token <Ast.info> TYPE_BOOLEAN
 %token <Ast.info> TYPE_NAT
+%token <Ast.info> TYPE_UNIT
 
 %token <Ast.info * string> IDENTIFIER
 %token <Ast.info * bool> BOOLEAN
 %token <Ast.info * int> NAT
+%token <Ast.info> UNIT
 
 %token <Ast.info> PARENTHL
 %token <Ast.info> PARENTHR
@@ -45,6 +47,7 @@ atom_term:
   | id = IDENTIFIER { TermVar (Tuple2.get1 id, Tuple2.get2 id) }
   | n = NAT { TermNat (Tuple2.get1 n, Tuple2.get2 n) }
   | b = BOOLEAN { TermBool (Tuple2.get1 b, Tuple2.get2 b) }
+  | u = UNIT { TermUnit u }
 
 typing:
   | t = arrow_typing { t }
@@ -55,3 +58,4 @@ atom_typing:
   | PARENTHL t = typing PARENTHR { t }
   | TYPE_BOOLEAN { Ast.Boolean }
   | TYPE_NAT { Ast.Nat }
+  | TYPE_UNIT { Ast.Unit }

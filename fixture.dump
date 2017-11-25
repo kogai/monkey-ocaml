@@ -2,3 +2,4 @@ Type error! [fixture.ko:7:25] @Condition clause not boolean
 Type error! [fixture.ko:8:25] @Alternative clause has type mismatch
 Type error! [fixture.ko:9:3] @Type mismatch!
 Type error! [fixture.ko:13:3] @Type mismatch!
+Type error! [fixture.ko:16:3] @Type mismatch!

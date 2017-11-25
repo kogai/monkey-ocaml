@@ -9,6 +9,7 @@ type ty =
   | Arrow of ty * ty
   | Nat
   | Boolean
+  | Unit
 [@@deriving show]
 
 type t =
@@ -18,9 +19,11 @@ type t =
   | TermIf of info * t * t * t
   | TermBool of info * bool
   | TermNat of info * int
+  | TermUnit of info
 [@@deriving show]
 
 let get_info = function
+  | TermUnit (i) -> i
   | TermVar (i, _) 
   | TermNat (i, _)
   | TermBool (i, _)
