@@ -6,6 +6,10 @@
 %token <Ast.info> IF
 %token <Ast.info> THEN
 %token <Ast.info> ELSE
+%token <Ast.info> CASE
+%token <Ast.info> OF
+%token <Ast.info> BAR
+
 %token <Ast.info> TYPE_BOOLEAN
 %token <Ast.info> TYPE_NAT
 %token <Ast.info> TYPE_UNIT
@@ -16,9 +20,12 @@
 %token <Ast.info> UNIT
 
 %token <Ast.info> LET
-%token <Ast.info> EQUAL
 %token <Ast.info> IN
 %token <Ast.info> DEF
+
+%token <Ast.info> EQUAL
+%token <Ast.info> PLUS
+
 %token <Ast.info> PARENTHL
 %token <Ast.info> PARENTHR
 %token <Ast.info> BRACEL
@@ -40,6 +47,8 @@ program:
 term:
   | t = app_term { t }
   | IF c = term THEN t1 = term ELSE t2 = term { TermIf ((get_info c), c, t1, t2) }
+  | i = CASE c = term OF BAR t = separated_list(BAR, case_arm) { TermCase (i, c, t) }
+  /* | i = CASE c = term OF BAR t = term { TermCase (i, c, t::[]) } */
   | PARENTHL
     id = IDENTIFIER
     CORON
@@ -65,6 +74,11 @@ atom_term:
   | u = UNIT { TermUnit u }
 record_field:
   | label = IDENTIFIER CORON value = term { (Tuple2.get2 label, value) }
+case_arm:
+  | ty = typing
+    i = ARROW
+    /* tm = term */
+    { TermCaseArm (i, ty, TermVar (i, "")) }
 
 typing:
   | t = arrow_typing { t }
@@ -74,6 +88,7 @@ arrow_typing:
 atom_typing:
   | BRACEL t = separated_list(STAR, record_field_typing) BRACER { Record t }
   | PARENTHL t = separated_list(STAR, typing) PARENTHR { Tuple t }
+  | PARENTHL t = separated_list(PLUS, typing) PARENTHR { Variant t }
   | PARENTHL t = typing PARENTHR { t }
   | TYPE_BOOLEAN { Ast.Boolean }
   | TYPE_NAT { Ast.Nat }

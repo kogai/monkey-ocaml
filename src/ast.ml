@@ -12,6 +12,7 @@ type ty =
   | Unit
   | Tuple of ty list
   | Record of (string * ty) list
+  | Variant of ty list
 [@@deriving show]
 
 type t =
@@ -27,6 +28,8 @@ type t =
   | TermGet of info * t * string
   | TermDef of info * string * t
   | TermLet of info * string * t * t
+  | TermCase of info * t * t list
+  | TermCaseArm of info * ty * t
 [@@deriving show]
 
 let get_info = function
@@ -40,6 +43,7 @@ let get_info = function
   | TermDef (i, _, _)
   | TermApp (i, _, _)
   | TermGet (i, _, _)
+  | TermCase (i, _, _)
     -> i
   | TermLet (i, _, _, _)
   | TermAbs (i, _, _, _)
@@ -52,11 +56,16 @@ let rec string_of_type = function
                  |> Core.List.map ~f:(fun (n, t) -> Printf.sprintf "%s: %s" n (string_of_type t))
                  |> Core.String.concat ~sep:" * "
                  |> Printf.sprintf "{ %s }"
-  | Tuple ts -> ts
-                |> Core.List.map ~f:string_of_type
-                |> Core.String.concat ~sep:" * "
-                |> Printf.sprintf "(%s)"
-
+  | Tuple ts
+    -> ts
+       |> Core.List.map ~f:string_of_type
+       |> Core.String.concat ~sep:" * "
+       |> Printf.sprintf "(%s)"
+  | Variant ts
+    -> ts
+       |> Core.List.map ~f:string_of_type
+       |> Core.String.concat ~sep:" + "
+       |> Printf.sprintf "(%s)"
   | Nat -> "nat"
   | Boolean -> "bool"
   | Unit -> "()"

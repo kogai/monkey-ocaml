@@ -63,3 +63,7 @@ id x.c; (* ExpectError *)
 ({a:100}).b; (* ExpectError *)
 (((x: {a:nat}) -> x) {a:100}).a;
 (((x: {a:nat}) -> x) {a:100}).c; (* ExpectError *)
+
+(x: (nat + bool)) -> case x of
+| x
+;

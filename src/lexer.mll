@@ -35,14 +35,18 @@ rule read =
   | '{' { BRACEL (info lexbuf) }
   | '}' { BRACER (info lexbuf) }
   | '=' { EQUAL (info lexbuf) }
+  | '+' { PLUS (info lexbuf) }
   | '*' { STAR (info lexbuf) }
   | '.' { DOT (info lexbuf) }
+  | '|' { BAR (info lexbuf) }
   | "->" { ARROW (info lexbuf) }
   | "true" { BOOLEAN ((info lexbuf), true) }
   | "false" { BOOLEAN ((info lexbuf), false) }
   | "if" { IF (info lexbuf) }
   | "then" { THEN (info lexbuf) }
   | "else" { ELSE (info lexbuf) }
+  | "case" { CASE (info lexbuf) }
+  | "of" { OF (info lexbuf) }
   | "()" { UNIT (info lexbuf) }
   | "(*" { comment lexbuf; read lexbuf }
 
