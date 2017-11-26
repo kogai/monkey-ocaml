@@ -1,5 +1,35 @@
-def id = (x: nat) -> x;
-id true;
+(x: (nat * bool)) -> x;
+((x: (nat * bool)) -> x) (100, true);
+((x: (nat * bool)) -> x) (true, 100);
+((x: (nat * bool)) -> x) (true, 100, ());
+
+(x: bool) -> x;
+((x: bool) -> x) true;
+(x: bool -> bool) -> if x true then x else x;
+(x: bool) -> if x then true else false;
+(x: bool) -> (y: bool) -> if x then x else y;
+
+(x: bool -> bool) -> if x then true else false;
+(x: bool -> bool) -> if x true then x else false;
+((x: bool) -> x) ((x: bool) -> x);
+
+((x: nat) -> x) 100;
+((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) 99;
+((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) true;
+
+((f: nat -> unit) -> f) ((x: nat) -> ());
+((f: nat -> unit) -> f) ((x: nat) -> x);
+
+(*
+コメント
+
+文字列のサポートはリストの実装後
+文字型のリストとして表現したいので
+*)
+
+(x: {a:nat * b:bool}) -> x;
+((x: {a:nat * b:bool}) -> x) {a:100, b:true};
+((x: {a:nat * b:bool}) -> x) {a:true, b:100};
 
 (x: nat -> bool) ->
   let y = x 100 in
@@ -8,39 +38,9 @@ id true;
   let y = x true in
   y;
 
-(x: {a:nat * b:bool}) -> x;
-((x: {a:nat * b:bool}) -> x) {a:100, b:true};
-((x: {a:nat * b:bool}) -> x) {a:true, b:100};
-
-(x: (nat * bool)) -> x;
-((x: (nat * bool)) -> x) (100, true);
-((x: (nat * bool)) -> x) (true, 100);
-((x: (nat * bool)) -> x) (true, 100, ());
-
-(*
-コメント
-
-グローバルとローカルの束縛の表現を分けたい
-def id (x:nat) = x
-def curried (x:nat -> nat) (y:nat) = x y
-
-文字列のサポートはリストの実装後
-文字型のリストとして表現したいので
-*)
-
-((f: nat -> unit) -> f) ((x: nat) -> ());
-((f: nat -> unit) -> f) ((x: nat) -> x);
-
-((x: nat) -> x) 100;
-((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) 99;
-((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) true;
-
-(x: bool -> bool) -> if x then true else false;
-(x: bool -> bool) -> if x true then x else false;
-((x: bool) -> x) ((x: bool) -> x);
-
-(x: bool) -> x;
-((x: bool) -> x) true;
-(x: bool -> bool) -> if x true then x else x;
-(x: bool) -> if x then true else false;
-(x: bool) -> (y: bool) -> if x then x else y;
+def id = (x: nat) -> x;
+def curried = (x:nat -> nat) -> (y:nat) -> x y;
+id true;
+curried id 100;
+curried id true;
+curried id {a: 100};
