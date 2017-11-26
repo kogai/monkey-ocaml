@@ -1,3 +1,6 @@
+def id = (x: nat) -> x;
+id true;
+
 (x: nat -> bool) ->
   let y = x 100 in
   y;

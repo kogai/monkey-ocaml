@@ -18,6 +18,7 @@
 %token <Ast.info> LET
 %token <Ast.info> EQUAL
 %token <Ast.info> IN
+%token <Ast.info> DEF
 %token <Ast.info> PARENTHL
 %token <Ast.info> PARENTHR
 %token <Ast.info> BRACEL
@@ -50,6 +51,7 @@ app_term:
   | t = atom_term { t }
   | e1 = app_term e2 = atom_term { TermApp (get_info e1, e1, e2) }
 atom_term:
+  | DEF id = IDENTIFIER EQUAL t = term { TermDef (Tuple2.get1 id, Tuple2.get2 id, t) }
   | LET id = IDENTIFIER EQUAL t1 = term IN t2 = term { TermLet (Tuple2.get1 id, Tuple2.get2 id, t1, t2) }
   | i = BRACEL t = separated_list(COMMA, record_field) BRACER { TermRecord (i, t) }
   | i = PARENTHL t = separated_list(COMMA, term) PARENTHR { TermTuple (i, t) }

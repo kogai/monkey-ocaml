@@ -24,6 +24,7 @@ type t =
   | TermUnit of info
   | TermTuple of info * t list
   | TermRecord of info * (string * t) list
+  | TermDef of info * string * t
   | TermLet of info * string * t * t
 [@@deriving show]
 
@@ -35,6 +36,7 @@ let get_info = function
   | TermTuple (i, _)
   | TermRecord (i, _)
     -> i
+  | TermDef (i, _, _)
   | TermApp (i, _, _)
     -> i
   | TermLet (i, _, _, _)

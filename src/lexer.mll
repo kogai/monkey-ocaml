@@ -47,6 +47,7 @@ rule read =
 
   | "let" { LET (info lexbuf) }
   | "in" { IN (info lexbuf) }
+  | "def" { DEF (info lexbuf) }
 
   | "bool" { TYPE_BOOLEAN (info lexbuf) }
   | "nat" { TYPE_NAT (info lexbuf) }

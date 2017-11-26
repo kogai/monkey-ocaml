@@ -58,6 +58,10 @@ let rec typeof' env = Ast.(function
       let ty1 = typeof' env t1 in
       TypeEnv.set env ty1 name;
       Arrow (ty1, (typeof' env t2))
+    | TermDef (info, name, t) ->
+      let ty = typeof' env t in
+      TypeEnv.set env ty name;
+      ty
     | TermApp (info, term1, term2) ->
       let ty1 = typeof' env term1 in
       let ty2 = typeof' env term2 in
