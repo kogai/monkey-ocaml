@@ -101,6 +101,19 @@ let rec typeof' env = Ast.(function
     | TermRecord (info, terms) ->
       let tys = List.map ~f:(fun (label, t) -> (label, (typeof' env t))) terms in
       Record tys
+    | TermRecordGet (info, term, name2) -> (match typeof' env term with
+        | Record tys as ty -> (match List.find ~f:(fun (name, ty) -> name = name2) tys with
+            | None ->
+              let reason = match term with
+                | TermVar (_, name) -> name
+                | _ -> string_of_type ty
+              in
+              raise @@ TypeError (info, Printf.sprintf "key %s is not exist in %s." name2 reason)
+            | Some (_, ty) -> ty
+          )
+        | ty -> raise @@ TypeError (info, Printf.sprintf "%s is not record." @@ string_of_type ty)
+
+      )
     | TermBool _ -> Boolean
     | TermNat _ -> Nat
     | TermUnit _ -> Unit

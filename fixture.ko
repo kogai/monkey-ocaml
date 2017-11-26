@@ -44,3 +44,13 @@ id true;
 curried id 100;
 curried id true;
 curried id {a: 100};
+
+def x = {a: 100, b: true};
+id x.a; (* OK *)
+id x.b; (* ExpectError *)
+id x.c; (* ExpectError *)
+
+({a:100}).a;
+({a:100}).b; (* ExpectError *)
+(((x: {a:nat}) -> x) {a:100}).a;
+(((x: {a:nat}) -> x) {a:100}).c;
