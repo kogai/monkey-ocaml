@@ -24,7 +24,7 @@ type t =
   | TermUnit of info
   | TermTuple of info * t list
   | TermRecord of info * (string * t) list
-  | TermRecordGet of info * t * string
+  | TermGet of info * t * string
   | TermDef of info * string * t
   | TermLet of info * string * t * t
 [@@deriving show]
@@ -39,7 +39,7 @@ let get_info = function
     -> i
   | TermDef (i, _, _)
   | TermApp (i, _, _)
-  | TermRecordGet (i, _, _)
+  | TermGet (i, _, _)
     -> i
   | TermLet (i, _, _, _)
   | TermAbs (i, _, _, _)

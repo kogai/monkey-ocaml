@@ -1,8 +1,3 @@
-(x: (nat * bool)) -> x;
-((x: (nat * bool)) -> x) (100, true);
-((x: (nat * bool)) -> x) (true, 100);
-((x: (nat * bool)) -> x) (true, 100, ());
-
 (x: bool) -> x;
 ((x: bool) -> x) true;
 (x: bool -> bool) -> if x true then x else x;
@@ -26,6 +21,20 @@
 文字列のサポートはリストの実装後
 文字型のリストとして表現したいので
 *)
+
+(x: (nat * bool)) -> x;
+((x: (nat * bool)) -> x) (100, true);
+((x: (nat * bool)) -> x) (true, 100);
+((x: (nat * bool)) -> x) (true, 100, ());
+
+def tpl = (100, true);
+((x:nat) -> x) tpl.1;
+((x:nat) -> x) tpl.2; (* ExpectError *)
+tpl.3; (* ExpectError *)
+
+((x:nat) -> x) (100, true).1;
+((x:nat) -> x) (100, true).2; (* ExpectError *)
+((x:nat) -> x) (100, true, ()).3; (* ExpectError *)
 
 (x: {a:nat * b:bool}) -> x;
 ((x: {a:nat * b:bool}) -> x) {a:100, b:true};
@@ -53,4 +62,4 @@ id x.c; (* ExpectError *)
 ({a:100}).a;
 ({a:100}).b; (* ExpectError *)
 (((x: {a:nat}) -> x) {a:100}).a;
-(((x: {a:nat}) -> x) {a:100}).c;
+(((x: {a:nat}) -> x) {a:100}).c; (* ExpectError *)
