@@ -28,8 +28,7 @@ type t =
   | TermGet of info * t * string
   | TermDef of info * string * t
   | TermLet of info * string * t * t
-  | TermCase of info * t * t list
-  | TermCaseArm of info * ty * t
+  | TermCase of info * t * (ty * t) list
 [@@deriving show]
 
 let get_info = function

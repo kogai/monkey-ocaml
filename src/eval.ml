@@ -123,6 +123,40 @@ let rec typeof' env = Ast.(function
          raise @@ TypeError (info, Printf.sprintf "key %s is not exist in %s." name reason)
        | Some ty -> ty
       )
+    | TermCase (info, cond, []) ->
+      raise @@ TypeError (info, Printf.sprintf "arm of pattern should exist at least one")
+    | TermCase (info, cond, branches) ->
+      let conds = match (typeof' env cond) with
+        | Variant ts -> ts
+        | _ -> (typeof' env cond)::[]
+      in
+
+      let rec explore_branches = function
+        (* | ([], []) -> exit 1
+           | (cond::[], []) -> exit 1
+           | (cond::[], branch::[]) -> exit 1
+           | (cond::conds, branch::branches) -> exit 1 *)
+        | (_, []) -> Unit
+        | (conds, (ty, tm)::branches) ->
+          (* When `ty` didn't exist in conds, this branche ignored *)
+          (* List.find conds ty -> bracnh.of.type *)
+          Unit
+      in
+      explore_branches (conds, branches)
+
+    (* let init = match arm with
+       | TermCaseArm (_, _, tm) -> typeof' env tm
+       | x -> raise @@ TypeError (info, Printf.sprintf "arm of pattern invalid")
+       in *)
+    (* let result = List.fold
+        ~f:(fun acc -> function
+            | TermCaseArm (_, ty, tm) -> acc
+            | x -> raise @@ TypeError (info, Printf.sprintf "arm of pattern invalid")
+          )
+        ~init
+        arms
+       in *)
+    (* Unit *)
     | TermBool _ -> Boolean
     | TermNat _ -> Nat
     | TermUnit _ -> Unit

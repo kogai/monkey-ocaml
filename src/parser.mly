@@ -45,10 +45,7 @@ program:
   | v = term SEMICORON { Some v }
 
 term:
-  | t = app_term { t }
-  | IF c = term THEN t1 = term ELSE t2 = term { TermIf ((get_info c), c, t1, t2) }
-  | i = CASE c = term OF BAR t = separated_list(BAR, case_arm) { TermCase (i, c, t) }
-  /* | i = CASE c = term OF BAR t = term { TermCase (i, c, t::[]) } */
+  | DEF id = IDENTIFIER EQUAL t = term { TermDef (Tuple2.get1 id, Tuple2.get2 id, t) }
   | PARENTHL
     id = IDENTIFIER
     CORON
@@ -57,13 +54,15 @@ term:
     ARROW
     tm = term
     { TermAbs ((Tuple2.get1 id), (Tuple2.get2 id), ty, tm) }
+  | t = app_term { t }
 app_term:
   | t = atom_term { t }
   | e1 = app_term e2 = atom_term { TermApp (get_info e1, e1, e2) }
 atom_term:
+  | IF c = term THEN t1 = term ELSE t2 = term { TermIf ((get_info c), c, t1, t2) }
+  | i = CASE c = term OF BAR arms = separated_list(BAR, case_arm) { TermCase (i, c, arms) }
   | t = atom_term info = DOT id = IDENTIFIER { TermGet (info, t, Tuple2.get2 id) }
   | t = atom_term info = DOT idx = NAT { TermGet (info, t, (string_of_int (Tuple2.get2 idx))) }
-  | DEF id = IDENTIFIER EQUAL t = term { TermDef (Tuple2.get1 id, Tuple2.get2 id, t) }
   | LET id = IDENTIFIER EQUAL t1 = term IN t2 = term { TermLet (Tuple2.get1 id, Tuple2.get2 id, t1, t2) }
   | i = BRACEL t = separated_list(COMMA, record_field) BRACER { TermRecord (i, t) }
   | i = PARENTHL t = separated_list(COMMA, term) PARENTHR { TermTuple (i, t) }
@@ -75,10 +74,7 @@ atom_term:
 record_field:
   | label = IDENTIFIER CORON value = term { (Tuple2.get2 label, value) }
 case_arm:
-  | ty = typing
-    i = ARROW
-    /* tm = term */
-    { TermCaseArm (i, ty, TermVar (i, "")) }
+  | ty = atom_typing ARROW tm = term { (ty, tm) }
 
 typing:
   | t = arrow_typing { t }
