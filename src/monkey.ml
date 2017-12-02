@@ -12,7 +12,9 @@ let to_string reasons =
       | None -> acc
     )
   |> List.rev
-  |> String.concat ~sep:"\n"
+  |> (fun xs ->
+      if List.is_empty xs then "no errors!"
+      else String.concat ~sep:"\n" xs)
 
 let write path content =
   let filename = match Filename.split_extension path with
