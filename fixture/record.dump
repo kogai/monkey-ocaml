@@ -1,0 +1,1 @@
+! [{ a: nat * b: bool }] and [{ a: bool * b: nat }] are imcompatible. [fixture/record.ko:3:3]

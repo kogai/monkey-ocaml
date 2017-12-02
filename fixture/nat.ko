@@ -1,0 +1,3 @@
+((x: nat) -> x) 100;
+((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) 99;
+((f: nat -> bool) -> (x: nat) -> f x) ((x: nat) -> true) true; (* ExpectError *)

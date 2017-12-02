@@ -1,0 +1,3 @@
+! [bool -> bool] which defined at condition clause isn't boolean [fixture/if-else.ko:5:25]
+! [bool -> bool] and [bool] which defined at alternative clause are imcompatible. [fixture/if-else.ko:6:25]
+! [bool] and [bool -> bool] are imcompatible. [fixture/if-else.ko:7:3]

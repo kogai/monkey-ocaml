@@ -1,0 +1,2 @@
+((f: nat -> unit) -> f) ((x: nat) -> ());
+((f: nat -> unit) -> f) ((x: nat) -> x); (* ExpectError *)

@@ -1,0 +1,3 @@
+(x: {a:nat * b:bool}) -> x;
+((x: {a:nat * b:bool}) -> x) {a:100, b:true};
+((x: {a:nat * b:bool}) -> x) {a:true, b:100}; (* ExpectError *)

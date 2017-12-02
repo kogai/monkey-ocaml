@@ -27,14 +27,14 @@ native: $(NAME).native
 byte: $(NAME).byte
 	@./$(NAME).byte $(ARGS)
 
+.PHONY: run
+run: $(NAME).byte
+	@./run.sh
+
 .PHONY: docker
 docker:
 	docker-compose build && \
 	docker-compose run $(NAME) make
-
-.PHONY: run
-run:
-	docker-compose run $(NAME) $(ARGS)
 
 .PHONY: install
 install:

@@ -1,0 +1,8 @@
+(x: nat -> bool) ->
+  let y = x 100 in
+  y;
+  
+(* ExpectError *)
+(x: nat -> bool) ->
+  let y = x true in
+  y;

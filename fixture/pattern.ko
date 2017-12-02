@@ -1,0 +1,28 @@
+(x: (nat + bool)) -> case x of
+| nat -> x
+| bool -> 0
+;
+
+(* ExpectError *)
+(x: (nat + bool)) -> case x of
+| nat -> x
+| bool -> x
+;
+
+ (* ExpectError *)
+(x: (nat + bool)) -> case x of
+| nat -> x
+| bool -> 0
+| {a:nat} -> x
+;
+
+(x: (nat + bool + {a:nat})) -> case x of
+| nat -> x
+| bool -> 0
+| {a:nat} -> x.a
+;
+
+(* ExpectError *)
+(x: (nat + bool + {a:nat})) -> case {a:100} of
+| {a:nat} -> x.a
+;

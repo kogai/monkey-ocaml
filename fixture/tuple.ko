@@ -1,0 +1,4 @@
+(x: (nat * bool)) -> x;
+((x: (nat * bool)) -> x) (100, true);
+((x: (nat * bool)) -> x) (true, 100); (* ExpectError *)
+((x: (nat * bool)) -> x) (true, 100, ()); (* ExpectError *)

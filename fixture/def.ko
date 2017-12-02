@@ -1,0 +1,12 @@
+def tpl = (100, true);
+((x:nat) -> x) tpl.1;
+((x:nat) -> x) tpl.2; (* ExpectError *)
+tpl.3; (* ExpectError *)
+
+def id = (x: nat) -> x;
+def curried = (x:nat -> nat) -> (y:nat) -> x y;
+id true; (* ExpectError *)
+curried id 100;
+curried id true; (* ExpectError *)
+curried id {a: 100}; (* ExpectError *)
+

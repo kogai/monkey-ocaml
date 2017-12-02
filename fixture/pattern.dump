@@ -1,0 +1,3 @@
+! case branch has type bool but expect nat [fixture/pattern.ko:7:25]
+! { a: nat } isn't belongs to (nat + bool) [fixture/pattern.ko:13:25]
+! case condition didn't support { a: 100 } yet [fixture/pattern.ko:26:37]

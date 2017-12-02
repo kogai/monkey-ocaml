@@ -1,0 +1,15 @@
+def id = (x: nat) -> x;
+
+((x:nat) -> x) (100, true).1;
+((x:nat) -> x) (100, true).2; (* ExpectError *)
+((x:nat) -> x) (100, true, ()).3; (* ExpectError *)
+
+def x = {a: 100, b: true};
+id x.a; (* OK *)
+id x.b; (* ExpectError *)
+id x.c; (* ExpectError *)
+
+({a:100}).a;
+({a:100}).b; (* ExpectError *)
+(((x: {a:nat}) -> x) {a:100}).a;
+(((x: {a:nat}) -> x) {a:100}).c; (* ExpectError *)
