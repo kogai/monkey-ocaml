@@ -178,14 +178,15 @@ let rec typeof' env = Ast.(function
                  let reducted = typeof' env' branch_term in
                  match acc with
                  | None -> (refined, Some reducted)
-                 | Some pre when pre <> reducted ->
+                 | Some pre when subtype reducted pre ->
+                   (refined, Some reducted)
+                 | Some pre ->
                    let reason = Printf.sprintf
                        "case branch has type %s but expect %s"
                        (string_of_type reducted)
                        (string_of_type pre)
                    in
                    raise @@ TypeError (info, reason)
-                 | acc -> (refined, Some reducted)
               )
             )
           ~init:(conds, None)

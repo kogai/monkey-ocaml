@@ -26,3 +26,12 @@
 (x: (nat + bool + {a:nat})) -> case {a:100} of
 | {a:nat} -> x.a
 ;
+
+def f = (x: (nat + bool)) ->
+  let y = case x of
+  | nat -> { a: x }
+  | bool -> { a: 0, b:x }
+  in
+  let z = (x: {a: nat * b:nat}) -> x.a in
+  z y (* ExpectError *)
+;
