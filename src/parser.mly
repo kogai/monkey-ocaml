@@ -18,6 +18,8 @@
 %token <Ast.info * bool> BOOLEAN
 %token <Ast.info * int> NAT
 %token <Ast.info> UNIT
+%token <Ast.info> ANY
+%token <Ast.info> EMPTY
 
 %token <Ast.info> LET
 %token <Ast.info> IN
@@ -96,5 +98,7 @@ atom_typing:
   | TYPE_BOOLEAN { Ast.Boolean }
   | TYPE_NAT { Ast.Nat }
   | TYPE_UNIT { Ast.Unit }
+  | ANY { Ast.Top }
+  | EMPTY { Ast.Bottom }
 record_field_typing:
   | label = IDENTIFIER CORON value = typing { (Tuple2.get2 label, value) }

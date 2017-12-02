@@ -14,6 +14,7 @@ type ty =
   | Record of (string * ty) list
   | Variant of ty list
   | Top
+  | Bottom
 [@@deriving show]
 
 type t =
@@ -95,3 +96,4 @@ let rec string_of_type = function
   | Boolean -> "bool"
   | Unit -> "unit"
   | Top -> "any"
+  | Bottom -> "empty"

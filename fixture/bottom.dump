@@ -1,0 +1,4 @@
+! nat isn't subtype of empty [fixture/bottom.ko:3:1]
+! bool isn't subtype of empty [fixture/bottom.ko:4:1]
+! { a: nat } isn't subtype of empty [fixture/bottom.ko:5:1]
+! nat -> nat isn't subtype of empty [fixture/bottom.ko:6:1]

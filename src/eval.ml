@@ -63,6 +63,7 @@ let rec subtype sub ty =
                               |> List.find ~f:(fun ty -> ty = sub)
                               |> Option.is_some
       | (_, Top) -> true
+      | (Bottom, _) -> true
       | (_, _) -> false
     )
 
@@ -103,7 +104,7 @@ let rec typeof' env = Ast.(function
         | Boolean ->
           let ty1 = typeof' env term1 in
           let ty2 = typeof' env term2 in
-          if ty1 = ty2
+          if subtype ty1 ty2 || subtype ty2 ty1
           then ty2
           else
             let reason = Printf.sprintf

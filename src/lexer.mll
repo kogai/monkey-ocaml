@@ -50,6 +50,7 @@ rule read =
   | "case" { CASE (info lexbuf) }
   | "of" { OF (info lexbuf) }
   | "any" { ANY (info lexbuf) }
+  | "empty" { EMPTY (info lexbuf) }
   | "()" { UNIT (info lexbuf) }
   | "(*" { comment lexbuf; read lexbuf }
 
