@@ -6,3 +6,11 @@
 (x: bool -> bool) -> if x true then x else false; (* ExpectError *)
 ((x: bool) -> x) ((x: bool) -> x); (* ExpectError *)
 
+def f = (x: bool) ->
+  let g = (x: {a: nat * b: nat * c: nat }) -> x.a in
+  let y = if x
+    then {a:0}
+    else {a:0, b:true}
+  in
+  g y (* ExpectError *)
+;

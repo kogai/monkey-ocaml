@@ -1,3 +1,4 @@
 ! [bool -> bool] which defined at condition clause isn't boolean [fixture/if-else.ko:5:25]
 ! [bool -> bool] and [bool] which defined at alternative clause are imcompatible. [fixture/if-else.ko:6:25]
 ! bool -> bool isn't subtype of bool [fixture/if-else.ko:7:3]
+! { a: nat * b: bool } isn't subtype of { a: nat * b: nat * c: nat } [fixture/if-else.ko:15:3]

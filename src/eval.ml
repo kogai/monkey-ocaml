@@ -101,18 +101,17 @@ let rec typeof' env = Ast.(function
        | _ ->
          raise @@ TypeError (info, "Arrow type expected"))
     | TermIf (info, condition, term1, term2) -> (match typeof' env condition with
-        | Boolean ->
-          let ty1 = typeof' env term1 in
-          let ty2 = typeof' env term2 in
-          if subtype ty1 ty2 || subtype ty2 ty1
-          then ty2
-          else
-            let reason = Printf.sprintf
-                "[%s] and [%s] which defined at alternative clause are imcompatible."
-                (string_of_type ty1)
-                (string_of_type ty2)
-            in
-            raise @@ TypeError (info, reason)
+        | Boolean -> (match (typeof' env term1, typeof' env term2) with
+            | (ty1, ty2) when subtype ty1 ty2 -> ty1
+            | (ty1, ty2) when subtype ty2 ty1 -> ty2
+            | (ty1, ty2) ->
+              let reason = Printf.sprintf
+                  "[%s] and [%s] which defined at alternative clause are imcompatible."
+                  (string_of_type ty1)
+                  (string_of_type ty2)
+              in
+              raise @@ TypeError (info, reason)
+          )
         | t -> raise @@ TypeError (
             info,
             Printf.sprintf "[%s] which defined at condition clause isn't boolean" (string_of_type t))
