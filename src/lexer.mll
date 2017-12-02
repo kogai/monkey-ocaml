@@ -49,6 +49,7 @@ rule read =
   | "else" { ELSE (info lexbuf) }
   | "case" { CASE (info lexbuf) }
   | "of" { OF (info lexbuf) }
+  | "any" { ANY (info lexbuf) }
   | "()" { UNIT (info lexbuf) }
   | "(*" { comment lexbuf; read lexbuf }
 

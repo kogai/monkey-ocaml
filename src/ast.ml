@@ -13,6 +13,7 @@ type ty =
   | Tuple of ty list
   | Record of (string * ty) list
   | Variant of ty list
+  | Top
 [@@deriving show]
 
 type t =
@@ -93,3 +94,4 @@ let rec string_of_type = function
   | Nat -> "nat"
   | Boolean -> "bool"
   | Unit -> "unit"
+  | Top -> "any"

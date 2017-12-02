@@ -62,6 +62,7 @@ let rec subtype sub ty =
       | (sub, Variant tys) -> tys
                               |> List.find ~f:(fun ty -> ty = sub)
                               |> Option.is_some
+      | (_, Top) -> true
       | (_, _) -> false
     )
 
@@ -91,9 +92,9 @@ let rec typeof' env = Ast.(function
          then ty2'
          else
            let reason = Printf.sprintf
-               "[%s] and [%s] are imcompatible."
-               (string_of_type ty1')
+               "%s isn't subtype of %s"
                (string_of_type ty2)
+               (string_of_type ty1')
            in
            raise @@ TypeError (info, reason)
        | _ ->
