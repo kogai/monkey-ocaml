@@ -1,1 +1,1 @@
-! [nat] and [bool] are imcompatible. [fixture/let.ko:7:11]
+! bool isn't subtype of nat [fixture/let.ko:7:11]

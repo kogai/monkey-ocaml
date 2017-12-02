@@ -1,2 +1,2 @@
-! [(nat * bool)] and [(bool * nat)] are imcompatible. [fixture/tuple.ko:3:3]
-! [(nat * bool)] and [(bool * nat * unit)] are imcompatible. [fixture/tuple.ko:4:3]
+! (bool * nat) isn't subtype of (nat * bool) [fixture/tuple.ko:3:3]
+! (bool * nat * unit) isn't subtype of (nat * bool) [fixture/tuple.ko:4:3]

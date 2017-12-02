@@ -1,1 +1,1 @@
-! [nat -> unit] and [nat -> nat] are imcompatible. [fixture/unit.ko:2:3]
+! nat -> nat isn't subtype of nat -> unit [fixture/unit.ko:2:3]
