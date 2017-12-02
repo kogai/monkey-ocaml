@@ -2,3 +2,20 @@ def f = (x: {a: nat}) -> x.a;
 f {a:0};
 f {a: 0, b: 0};
 f {a: true, b: 0, c: 0}; (* ExpectError *)
+
+(* 共変 *)
+def g = (f: {a: nat} -> {d: nat}) -> f {a: 0};
+g ((x: {a: nat}) -> {d: x.a});
+g ((x: {a: nat}) -> {d: x.a, e: 0});
+g ((x: {a: nat}) -> {d: true}); (* ExpectError *)
+
+(* 反変 *)
+def h = (f: {a: nat * b: nat} -> {d: nat}) -> f {a: 0, b: 1};
+h ((x: {a: nat * b: nat}) -> {d: x.b});
+h ((x: {a: nat}) -> {d: x.a});
+h ((x: {a: nat * b: nat * c: nat}) -> {d: x.c}); (* ExpectError *)
+
+def i = (x: (nat + bool)) -> x;
+i 100;
+i true;
+i {a: 0}; (* ExpectError *)

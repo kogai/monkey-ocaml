@@ -58,9 +58,10 @@ let rec subtype sub ty =
             )
           ~init:true
           tys
-      | (Variant subs, Variant tys) -> false
-      | (Arrow (sub1, sub2), Arrow (ty1, ty2)) ->
-        false
+      | (Arrow (sub1, sub2), Arrow (ty1, ty2)) -> subtype ty1 sub1 && subtype sub2 ty2
+      | (sub, Variant tys) -> tys
+                              |> List.find ~f:(fun ty -> ty = sub)
+                              |> Option.is_some
       | (_, _) -> false
     )
 

@@ -1,1 +1,4 @@
 ! [{ a: nat }] and [{ a: bool * b: nat * c: nat }] are imcompatible. [fixture/sub.ko:4:1]
+! [{ a: nat } -> { d: nat }] and [{ a: nat } -> { d: bool }] are imcompatible. [fixture/sub.ko:10:1]
+! [{ a: nat * b: nat } -> { d: nat }] and [{ a: nat * b: nat * c: nat } -> { d: nat }] are imcompatible. [fixture/sub.ko:16:1]
+! [(nat + bool)] and [{ a: nat }] are imcompatible. [fixture/sub.ko:21:1]
