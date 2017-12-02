@@ -1,0 +1,1 @@
+! infix nat == bool are imcompatible [fixture/arith.ko:5:6]

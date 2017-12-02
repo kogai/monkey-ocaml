@@ -23,8 +23,10 @@
 %token <Ast.info> IN
 %token <Ast.info> DEF
 
+%token <Ast.info> EQUAL_D
 %token <Ast.info> EQUAL
 %token <Ast.info> PLUS
+%token <Ast.info> MINUS
 
 %token <Ast.info> PARENTHL
 %token <Ast.info> PARENTHR
@@ -58,6 +60,7 @@ term:
 app_term:
   | t = atom_term { t }
   | e1 = app_term e2 = atom_term { TermApp (get_info e1, e1, e2) }
+  | t1 = term op = infix t2 = term { TermInfix (get_info t1, op, t1, t2) }
 atom_term:
   | IF c = term THEN t1 = term ELSE t2 = term { TermIf ((get_info c), c, t1, t2) }
   | i = CASE c = term OF BAR arms = separated_list(BAR, case_arm) { TermCase (i, c, arms) }
@@ -75,6 +78,10 @@ record_field:
   | label = IDENTIFIER CORON value = term { (Tuple2.get2 label, value) }
 case_arm:
   | ty = atom_typing ARROW tm = term { (ty, tm) }
+infix:
+  | EQUAL_D { "==" }
+  | PLUS { "+" }
+  | MINUS { "-" }
 
 typing:
   | t = arrow_typing { t }

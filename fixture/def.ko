@@ -9,4 +9,3 @@ id true; (* ExpectError *)
 curried id 100;
 curried id true; (* ExpectError *)
 curried id {a: 100}; (* ExpectError *)
-

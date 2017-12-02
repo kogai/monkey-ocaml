@@ -174,6 +174,27 @@ let rec typeof' env = Ast.(function
       (match reducted with
        | None -> exit 1
        | Some r -> r)
+    | TermInfix (info, op, left, right) -> begin
+        match op with
+        | "==" ->
+          let ty_left = typeof' env left in
+          let ty_right = typeof' env right in
+          if ty_left = ty_right
+          then Boolean
+          else raise @@ TypeError (
+              info,
+              sprintf "infix %s %s %s are imcompatible" (string_of_type ty_left) op (string_of_type ty_right))
+        | "-"
+        | "+" ->
+          let ty_left = typeof' env left in
+          let ty_right = typeof' env right in
+          if ty_left = ty_right
+          then ty_left
+          else raise @@ TypeError (
+              info,
+              sprintf "infix %s %s %s are imcompatible" (string_of_type ty_left) op (string_of_type ty_right))
+        | _ -> raise @@ TypeError (info, sprintf "infix operator %s is not supported" op)
+      end
     | TermBool _ -> Boolean
     | TermNat _ -> Nat
     | TermUnit _ -> Unit

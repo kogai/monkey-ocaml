@@ -29,6 +29,7 @@ type t =
   | TermDef of info * string * t
   | TermLet of info * string * t * t
   | TermCase of info * t * (ty * t) list
+  | TermInfix of info * string * t * t
 [@@deriving show]
 
 let get_info = function
@@ -47,6 +48,7 @@ let get_info = function
   | TermLet (i, _, _, _)
   | TermAbs (i, _, _, _)
   | TermIf (i, _, _, _)
+  | TermInfix (i, _, _, _)
     -> i
 
 let rec string_of_t = Printf.(function
@@ -68,6 +70,7 @@ let rec string_of_t = Printf.(function
     | TermLet (_, name, t1, t2) -> sprintf ""
     | TermAbs (_, name, t1, t2) -> sprintf ""
     | TermIf (_, name, t1, t2) -> sprintf ""
+    | TermInfix (_, op, left, right) -> sprintf "%s %s %s" (string_of_t left) op (string_of_t right)
     | TermCase (_, c, ts) -> sprintf ""
   )
 
