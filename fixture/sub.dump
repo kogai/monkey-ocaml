@@ -1,0 +1,1 @@
+! [{ a: nat }] and [{ a: bool * b: nat * c: nat }] are imcompatible. [fixture/sub.ko:4:1]

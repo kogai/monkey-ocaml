@@ -46,6 +46,24 @@ module ValueEnv = Environment(struct
     type t = Ast.t
   end)
 
+let rec subtype sub ty =
+  sub = ty || Ast.(match (sub, ty) with
+      | (Record subs, Record tys) ->
+        List.fold
+          ~f:(fun acc (name, ty) ->
+              let sub = List.find ~f:(fun (n, _) -> n = name) subs in
+              acc && (match sub with
+                  | None -> false
+                  | Some (_, s) -> s = ty)
+            )
+          ~init:true
+          tys
+      | (Variant subs, Variant tys) -> false
+      | (Arrow (sub1, sub2), Arrow (ty1, ty2)) ->
+        false
+      | (_, _) -> false
+    )
+
 let rec typeof' env = Ast.(function
     | TermVar (info, name) -> (match TypeEnv.get name env with
         | None -> raise @@ BindError (info, name)
@@ -68,7 +86,7 @@ let rec typeof' env = Ast.(function
       let ty2 = typeof' env term2 in
       (match ty1 with
        | Arrow (ty1', ty2') ->
-         if ty1' = ty2
+         if subtype ty2 ty1'
          then ty2'
          else
            let reason = Printf.sprintf

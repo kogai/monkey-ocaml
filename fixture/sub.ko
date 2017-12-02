@@ -1,0 +1,4 @@
+def f = (x: {a: nat}) -> x.a;
+f {a:0};
+f {a: 0, b: 0};
+f {a: true, b: 0, c: 0}; (* ExpectError *)
