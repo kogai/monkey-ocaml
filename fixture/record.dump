@@ -1,1 +1,2 @@
 ! { a: bool * b: nat } isn't subtype of { a: nat * b: bool } [fixture/record.ko:3:3]
+! { a: { a: bool } } isn't subtype of { a: { a: nat } } [fixture/record.ko:11:3]

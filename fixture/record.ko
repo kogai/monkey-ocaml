@@ -5,3 +5,7 @@
 def f = (x: {a:nat * b:bool}) -> x.a;
 f {a:0, b:true};
 f {b:true, a:0};
+
+def dep = (x: {a:{a:nat}}) -> x.a.a;
+dep {a:{a:0}};
+dep {a:{a:true}}; (* ExpectError *)
