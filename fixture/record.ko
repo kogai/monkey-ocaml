@@ -1,3 +1,7 @@
 (x: {a:nat * b:bool}) -> x;
 ((x: {a:nat * b:bool}) -> x) {a:100, b:true};
 ((x: {a:nat * b:bool}) -> x) {a:true, b:100}; (* ExpectError *)
+
+def f = (x: {a:nat * b:bool}) -> x.a;
+f {a:0, b:true};
+f {b:true, a:0};
