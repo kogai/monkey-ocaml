@@ -49,6 +49,28 @@ let get_info = function
   | TermIf (i, _, _, _)
     -> i
 
+let rec string_of_t = Printf.(function
+    | TermUnit _ -> "()"
+    | TermVar (_, name) -> name
+    | TermNat (_, v) -> string_of_int v
+    | TermBool (_, b) -> string_of_bool b
+    | TermTuple (_, ts) -> ts
+                           |> Core.List.map ~f:string_of_t
+                           |> Core.String.concat ~sep:", "
+                           |> sprintf "(%s)"
+    | TermRecord (_, ts) -> ts
+                            |> Core.List.map ~f:(fun (n, t) -> Printf.sprintf "%s: %s" n (string_of_t t))
+                            |> Core.String.concat ~sep:", "
+                            |> sprintf "{ %s }"
+    | TermDef (_, n, t) -> sprintf "def %s = %s;" n (string_of_t t)
+    | TermApp (_, t1, t2) -> sprintf "%s %s" (string_of_t t1) ((string_of_t t2))
+    | TermGet (_, t, n) -> sprintf "%s.%s" (string_of_t t) n
+    | TermLet (_, name, t1, t2) -> sprintf ""
+    | TermAbs (_, name, t1, t2) -> sprintf ""
+    | TermIf (_, name, t1, t2) -> sprintf ""
+    | TermCase (_, c, ts) -> sprintf ""
+  )
+
 let rec string_of_type = function
   | Arrow (ty1, ty2) -> Printf.sprintf "%s -> %s" (string_of_type ty1) (string_of_type ty2)
   | Record ts -> ts
@@ -67,4 +89,4 @@ let rec string_of_type = function
        |> Printf.sprintf "(%s)"
   | Nat -> "nat"
   | Boolean -> "bool"
-  | Unit -> "()"
+  | Unit -> "unit"

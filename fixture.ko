@@ -69,9 +69,23 @@ id x.c; (* ExpectError *)
 | bool -> 0
 ;
 
-(*
 (x: (nat + bool)) -> case x of
-| nat -> 0
-| bool -> 1
+| nat -> x
+| bool -> x
 ;
-*)
+
+(x: (nat + bool)) -> case x of
+| nat -> x
+| bool -> 0
+| {a:nat} -> x
+;
+
+(x: (nat + bool + {a:nat})) -> case x of
+| nat -> x
+| bool -> 0
+| {a:nat} -> x.a
+;
+
+(x: (nat + bool + {a:nat})) -> case {a:100} of
+| {a:nat} -> x.a
+;

@@ -52,8 +52,9 @@ let rec typeof' env = Ast.(function
         | Some x -> x
       )
     | TermAbs (info, name, ty1, term) ->
-      TypeEnv.set env ty1 name;
-      Arrow (ty1, (typeof' env term))
+      let env' = TypeEnv.create (Some env) in
+      TypeEnv.set env' ty1 name;
+      Arrow (ty1, (typeof' env' term))
     | TermLet (info, name, t1, t2) ->
       let ty1 = typeof' env t1 in
       TypeEnv.set env ty1 name;
@@ -146,7 +147,15 @@ let rec typeof' env = Ast.(function
                  raise @@ TypeError (info, reason)
                | Some _ ->
                  let refined = List.filter ~f:(fun c -> not @@ is_match c) conds in
-                 let reducted = typeof' env branch_term in (* Need refinement? *)
+                 let env' = TypeEnv.create (Some env) in
+                 let name = match cond with
+                   | TermVar (_, n) -> n
+                   | x ->
+                     let reason = Printf.sprintf "case condition didn't support %s yet" (string_of_t x) in
+                     raise @@ TypeError ((get_info x), reason)
+                 in
+                 TypeEnv.set env' matchable_ty name;
+                 let reducted = typeof' env' branch_term in
                  match acc with
                  | None -> (refined, Some reducted)
                  | Some pre when pre <> reducted ->
