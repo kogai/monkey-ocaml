@@ -131,32 +131,40 @@ let rec typeof' env = Ast.(function
         | _ -> (typeof' env cond)::[]
       in
 
-      let rec explore_branches = function
-        (* | ([], []) -> exit 1
-           | (cond::[], []) -> exit 1
-           | (cond::[], branch::[]) -> exit 1
-           | (cond::conds, branch::branches) -> exit 1 *)
-        | (_, []) -> Unit
-        | (conds, (ty, tm)::branches) ->
-          (* When `ty` didn't exist in conds, this branche ignored *)
-          (* List.find conds ty -> bracnh.of.type *)
-          Unit
+      let (_, reducted) = List.fold
+          ~f:(fun (conds, acc) (matchable_ty, branch_term) ->
+              let is_match c = c = matchable_ty in
+              let has_match = List.find ~f:is_match conds in
+              (match has_match with
+               | None ->
+                 let reason =
+                   Printf.sprintf
+                     "%s isn't belongs to %s"
+                     (string_of_type matchable_ty)
+                     (string_of_type (typeof' env cond))
+                 in
+                 raise @@ TypeError (info, reason)
+               | Some _ ->
+                 let refined = List.filter ~f:(fun c -> not @@ is_match c) conds in
+                 let reducted = typeof' env branch_term in (* Need refinement? *)
+                 match acc with
+                 | None -> (refined, Some reducted)
+                 | Some pre when pre <> reducted ->
+                   let reason = Printf.sprintf
+                       "case branch has type %s but expect %s"
+                       (string_of_type reducted)
+                       (string_of_type pre)
+                   in
+                   raise @@ TypeError (info, reason)
+                 | acc -> (refined, Some reducted)
+              )
+            )
+          ~init:(conds, None)
+          branches
       in
-      explore_branches (conds, branches)
-
-    (* let init = match arm with
-       | TermCaseArm (_, _, tm) -> typeof' env tm
-       | x -> raise @@ TypeError (info, Printf.sprintf "arm of pattern invalid")
-       in *)
-    (* let result = List.fold
-        ~f:(fun acc -> function
-            | TermCaseArm (_, ty, tm) -> acc
-            | x -> raise @@ TypeError (info, Printf.sprintf "arm of pattern invalid")
-          )
-        ~init
-        arms
-       in *)
-    (* Unit *)
+      (match reducted with
+       | None -> exit 1
+       | Some r -> r)
     | TermBool _ -> Boolean
     | TermNat _ -> Nat
     | TermUnit _ -> Unit

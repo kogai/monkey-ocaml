@@ -9,7 +9,7 @@
     "request": "launch",
     "program": "${workspaceRoot}/monkey.byte",
     "arguments": [
-      "fixture/bool.mky"
+      "fixture.ko"
     ],
     "console": "internalConsole",
     "stopOnEntry": false

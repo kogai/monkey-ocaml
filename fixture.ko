@@ -66,5 +66,12 @@ id x.c; (* ExpectError *)
 
 (x: (nat + bool)) -> case x of
 | nat -> x
-| bool -> x
+| bool -> 0
 ;
+
+(*
+(x: (nat + bool)) -> case x of
+| nat -> 0
+| bool -> 1
+;
+*)
