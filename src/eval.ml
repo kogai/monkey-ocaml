@@ -32,8 +32,6 @@ end = struct
       | None -> get name o
       | v -> v
 
-  let set env data key =
-    Hashtbl.set env.store ~key ~data;
   let rec show ?(offset="") = function
     | { store; outer = None} ->
       store
@@ -51,6 +49,9 @@ end = struct
             Printf.sprintf "%s\n%s(%s, %s)" acc offset key (Ast.show value))
       |> (fun x -> x::[offset ^ "Outer: " ^ (show ~offset: ("  " ^ offset) o)])
       |> String.concat ~sep:"\n"
+
+  let set env data key =
+    Hashtbl.set env.store ~key ~data;
 end
 
 let rec parse lexbuf =
