@@ -51,7 +51,7 @@ end = struct
       )
 
   let set env data key =
-    Hashtbl.set env.store ~key ~data;
+    Hashtbl.add_exn env.store ~key ~data;
 end
 
 let rec parse lexbuf =
@@ -59,21 +59,28 @@ let rec parse lexbuf =
   | None -> []
   | Some statement -> statement::(parse lexbuf)
 
-let rec eval' env = Ast.(function
-    | TermVar (info, name) -> (match Environment.get name env with
-        | None -> raise @@ BindError (info, name)
-        | Some x -> x
-      )
-    | TermApp (info, TermAbs (_, name, term1), term2) ->
-      let closure = Environment.create (Some env) in
-      Environment.set closure (eval' env term2) name;
-      eval' closure term1 
-    | TermApp (info, term1, term2) ->
-      let term1 = eval' env term1 in
-      let term2 = eval' env term2 in
-      eval' env (TermApp (info, term1, term2))
-    (* No rules to apply *)
-    | TermAbs (_, _, _) as x -> x
+let rec eval' env x =
+  let open Ast in
+  Printf.printf "Evaluate... %s\n" @@ show x;
+
+  (match x with
+   | TermApp (info, TermAbs (_, name, tm1), term2) ->
+     let env' = Environment.create (Some env) in
+     Environment.set env' (eval' env term2) name;
+     eval' env' tm1
+
+   | TermApp (info, term1, term2) ->
+     let term1' = eval' env term1 in
+     let term2' = eval' env term2 in
+     eval' env (TermApp (info, term1', term2'))
+
+   | TermAbs (info, name, body) ->
+     TermAbs (info, name, (try eval' env body with | _ -> body))
+
+   | TermVar (info, name) -> (match Environment.get name env with
+       | None -> raise @@ BindError (info, name)
+       | Some x -> x
+     )
   )
 
 let eval filename env lexbuf =
