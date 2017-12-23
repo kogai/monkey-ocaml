@@ -10,7 +10,11 @@ type t =
   | TermVar of info * string
   | TermAbs of info * string * t
   | TermApp of info * t * t
-[@@deriving show]
+
+let rec show = Printf.(function
+    | TermVar (_, name) -> sprintf "%s" name
+    | TermApp (_, t1, t2) -> sprintf "(%s %s)" (show t1) ((show t2))
+    | TermAbs (_, name, t) -> sprintf "(%s -> %s)" name (show t))
 
 let get_info = function
   | TermVar(i, _) -> i

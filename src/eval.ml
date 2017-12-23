@@ -34,6 +34,23 @@ end = struct
 
   let set env data key =
     Hashtbl.set env.store ~key ~data;
+  let rec show ?(offset="") = function
+    | { store; outer = None} ->
+      store
+      |> Hashtbl.to_alist
+      |> List.fold
+        ~init:""
+        ~f:(fun acc (key, value) ->
+            Printf.sprintf "%s\n%s(%s, %s)" acc offset key (Ast.show value))
+    | { store; outer = Some o } ->
+      store
+      |> Hashtbl.to_alist
+      |> List.fold
+        ~init:""
+        ~f:(fun acc (key, value) ->
+            Printf.sprintf "%s\n%s(%s, %s)" acc offset key (Ast.show value))
+      |> (fun x -> x::[offset ^ "Outer: " ^ (show ~offset: ("  " ^ offset) o)])
+      |> String.concat ~sep:"\n"
 end
 
 let rec parse lexbuf =
