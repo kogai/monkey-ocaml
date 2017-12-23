@@ -1,1 +1,1 @@
-(true -> true (x -> x) (y -> y)) (t -> f -> t);
+(t -> f -> t) (x -> x) (y -> y);
