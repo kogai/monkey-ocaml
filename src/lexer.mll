@@ -30,7 +30,6 @@ rule read =
   | newline { next_line lexbuf; read lexbuf }
   | ";" { TERMINATE (info lexbuf) }
   | "->" { ARROW (info lexbuf) }
-  | "lambda" { LAMBDA (info lexbuf) }
   | id { IDENTIFIER ((info lexbuf), (identifier lexbuf)) }
   | '(' { PARENTHL (info lexbuf) }
   | ')' { PARENTHR (info lexbuf) }
