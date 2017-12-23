@@ -9,6 +9,7 @@ module Environment : sig
     store: (string, Ast.t) Hashtbl.t;
     outer: t option;
   }
+  val show: ?offset:string -> t -> string
   val create: (t option) -> t
   val empty: t
   val get: string -> t-> Ast.t option
@@ -32,23 +33,22 @@ end = struct
       | None -> get name o
       | v -> v
 
-  let rec show ?(offset="") = function
-    | { store; outer = None} ->
-      store
+  let rec show ?(offset="") {store; outer} =
+    let show' x =
+      x
       |> Hashtbl.to_alist
-      |> List.fold
-        ~init:""
-        ~f:(fun acc (key, value) ->
-            Printf.sprintf "%s\n%s(%s, %s)" acc offset key (Ast.show value))
-    | { store; outer = Some o } ->
-      store
-      |> Hashtbl.to_alist
-      |> List.fold
-        ~init:""
-        ~f:(fun acc (key, value) ->
-            Printf.sprintf "%s\n%s(%s, %s)" acc offset key (Ast.show value))
-      |> (fun x -> x::[offset ^ "Outer: " ^ (show ~offset: ("  " ^ offset) o)])
+      |> List.map
+        ~f:(fun (key, value) ->
+            Printf.sprintf "(%s, %s)" key (Ast.show value))
       |> String.concat ~sep:"\n"
+    in
+
+    Printf.sprintf "%s / Outer >>> %s"
+      (show' store)
+      (match outer with
+       | None -> ""
+       | Some o -> show o
+      )
 
   let set env data key =
     Hashtbl.set env.store ~key ~data;
