@@ -1,1 +1,6 @@
-(t -> f -> t) (x -> x) (y -> y);
+((if -> true -> false ->
+    if true (x -> x) (y -> y))
+  (b -> t -> e -> b t e) 
+  (t -> f -> t)
+  (t -> f -> f))
+  ;

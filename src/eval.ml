@@ -61,12 +61,10 @@ let rec parse lexbuf =
 
 let rec eval' env x =
   let open Ast in
-  Printf.printf "Evaluate... %s\n" @@ show x;
-
   (match x with
    | TermApp (info, TermAbs (_, name, tm1), term2) ->
+     Environment.set env (eval' env term2) name;
      let env' = Environment.create (Some env) in
-     Environment.set env' (eval' env term2) name;
      eval' env' tm1
 
    | TermApp (info, term1, term2) ->
@@ -74,9 +72,7 @@ let rec eval' env x =
      let term2' = eval' env term2 in
      eval' env (TermApp (info, term1', term2'))
 
-   | TermAbs (info, name, body) ->
-     TermAbs (info, name, (try eval' env body with | _ -> body))
-
+   | TermAbs (info, name, body) as x -> x
    | TermVar (info, name) -> (match Environment.get name env with
        | None -> raise @@ BindError (info, name)
        | Some x -> x
